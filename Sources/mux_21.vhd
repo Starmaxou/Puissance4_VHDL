@@ -34,9 +34,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity mux is
     port(
         sel_mux :in STD_LOGIC;
-        in_data0 : in STD_LOGIC_VECTOR (5 downto 0);
-        in_data1 : in STD_LOGIC_VECTOR (5 downto 0);
-        out_data : out STD_LOGIC_VECTOR (5 downto 0)
+        in_data0 : in STD_LOGIC_VECTOR (13 downto 0);
+        in_data1 : in STD_LOGIC_VECTOR (13 downto 0);
+        out_data : out STD_LOGIC_VECTOR (13 downto 0)
         );
 --  Port ( );
 end mux;
