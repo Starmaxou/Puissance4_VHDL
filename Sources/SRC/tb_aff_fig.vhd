@@ -76,8 +76,9 @@ begin
         wait for 100 * TbPeriod;
         in_BD <= "0000000000000000";--C=0 L=0
         in_HG <= "0000100100001001";--C=9 L=9
+        wait for 5 * TbPeriod;
         in_affichage_en <= '1';
-        wait for 2 ns;
+        wait for 1 * TbPeriod;
         in_affichage_en <= '0';
         wait for 100 * TbPeriod;
         in_affichage_en <= '1';
