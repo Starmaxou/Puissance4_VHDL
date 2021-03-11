@@ -54,6 +54,7 @@ begin
     --variable Nb_pixel_HG: integer range 0 to 15999;
     --variable Nb_pixel_BD: integer range 0 to 15999;
     variable Nb_HGL:integer range 0 to 99;
+    variable Nb_HGL_cpy:integer range 0 to 99;
     variable Nb_HGC:integer range 0 to 159;
     variable Nb_HGC_cpy:integer range 0 to 159;
     variable Nb_BDL:integer range 0 to 99;
@@ -111,26 +112,34 @@ begin
                                         cpt_c := 0;
                                         cpt_figure:=0;
                                         Nb_HGC_cpy:=Nb_HGC;
+                                        Nb_HGL_cpy:=Nb_HGL;
                                         cstate <=RUNNING;
                                         out_R_W<='1';
                                     end if;
                              WHEN RUNNING =>
-                        
-                                     if(cpt_c /= (Nb_BDC-Nb_HGC) or cpt_l /= (Nb_BDL-Nb_HGL)) then
-                                         cpt_figure:=cpt_figure+1;
-                                         if(cpt_c<(Nb_BDC-Nb_HGC)) then
-                                                cpt_c := cpt_c + 1;
-                                         else
-                                                cpt_c:=0;
-                                                cpt_l:=cpt_l+1;
-                                         end if;
-                                           cstate <= RUNNING;
+                             cpt_figure:=cpt_figure+1;
+                             if(cpt_figure>1)then
+                                if(cpt_l = (Nb_BDL-Nb_HGL) and cpt_c=(Nb_BDC-Nb_HGC))then
+                                    out_R_W<='0';
+                                    cstate <= WAITING_ON;
+                                     
+                                else
+                                     
+                                     if(cpt_c=(Nb_BDC-Nb_HGC)) then
+                                          cpt_l := cpt_l + 1;
+                                          cpt_c:=0;
                                      else
-                                           out_R_W<='0';
-                                           cstate <= WAITING_ON;
+                                          cpt_c := cpt_c + 1;
                                      end if;
+                                     cstate <= RUNNING;
+                                end if;
+                             else
+                              cstate <= RUNNING;
+                             end if;
+                           
+                                                                 
                            END CASE;
-                           out_adr <= std_logic_vector(to_unsigned( Nb_HGC_cpy+cpt_c+(160*cpt_l), 14));
+                           out_adr <= std_logic_vector(to_unsigned( Nb_HGC_cpy+cpt_c+(160*(cpt_l+Nb_HGL_cpy)), 14));
                            out_adr_figure<= std_logic_vector(to_unsigned(cpt_figure,14)); 
             end if;
         end if;
