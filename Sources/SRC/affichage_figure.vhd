@@ -59,7 +59,7 @@ begin
     variable Nb_BDL:integer range 0 to 99;
     variable Nb_BDC:integer range 0 to 159;
     variable cpt_c: integer range 0 to 159;
-    variable cpt: integer range 0 to 15999;
+    variable cpt_figure: integer range 0 to 15999;
     variable cpt_l: integer range 0 to 99;
     variable flag: boolean :=false;
     begin
@@ -109,7 +109,7 @@ begin
                                     else
                                         cpt_l := 0;
                                         cpt_c := 0;
-                                        cpt:=0;
+                                        cpt_figure:=0;
                                         Nb_HGC_cpy:=Nb_HGC;
                                         cstate <=RUNNING;
                                         out_R_W<='1';
@@ -117,7 +117,7 @@ begin
                              WHEN RUNNING =>
                         
                                      if(cpt_c /= (Nb_BDC-Nb_HGC) or cpt_l /= (Nb_BDL-Nb_HGL)) then
-                                         cpt:=cpt+1;
+                                         cpt_figure:=cpt_figure+1;
                                          if(cpt_c<(Nb_BDC-Nb_HGC)) then
                                                 cpt_c := cpt_c + 1;
                                          else
@@ -131,10 +131,11 @@ begin
                                      end if;
                            END CASE;
                            out_adr <= std_logic_vector(to_unsigned( Nb_HGC_cpy+cpt_c+(160*cpt_l), 14));
-                           out_adr_figure<= std_logic_vector(to_unsigned(cpt,14)); 
+                           out_adr_figure<= std_logic_vector(to_unsigned(cpt_figure,14)); 
             end if;
         end if;
     end process;
 end Behavioral;
+
 
 
