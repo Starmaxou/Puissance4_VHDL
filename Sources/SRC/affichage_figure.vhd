@@ -53,14 +53,14 @@ begin
     process(clk,reset)
     --variable Nb_pixel_HG: integer range 0 to 15999;
     --variable Nb_pixel_BD: integer range 0 to 15999;
-    variable Nb_HGL:integer range 0 to 100;
-    variable Nb_HGC:integer range 0 to 160;
-    variable Nb_HGC_cpy:integer range 0 to 160;
-    variable Nb_BDL:integer range 0 to 100;
-    variable Nb_BDC:integer range 0 to 160;
-    variable cpt_c: integer range 0 to 8;
+    variable Nb_HGL:integer range 0 to 99;
+    variable Nb_HGC:integer range 0 to 159;
+    variable Nb_HGC_cpy:integer range 0 to 159;
+    variable Nb_BDL:integer range 0 to 99;
+    variable Nb_BDC:integer range 0 to 159;
+    variable cpt_c: integer range 0 to 159;
     variable cpt: integer range 0 to 15999;
-    variable cpt_l: integer range 0 to 8;
+    variable cpt_l: integer range 0 to 99;
     variable flag: boolean :=false;
     begin
         if(reset = '1') then
