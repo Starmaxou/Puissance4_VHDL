@@ -41,7 +41,7 @@ entity affichage_figure is
             in_BD : in std_logic_vector(15 downto 0);
             in_affichage_en : in STD_LOGIC;
             out_adr : out std_logic_vector(13 downto 0);
-            out_adr_firgure : out std_logic_vector(13 downto 0);
+            out_adr_figure : out std_logic_vector(13 downto 0);
             out_R_W: out std_logic
     );
 end affichage_figure;
@@ -131,9 +131,10 @@ begin
                                      end if;
                            END CASE;
                            out_adr <= std_logic_vector(to_unsigned( Nb_HGC_cpy+cpt_c+(160*cpt_l), 14));
-                           out_adr_firgure<= std_logic_vector(to_unsigned(cpt,14)); 
+                           out_adr_figure<= std_logic_vector(to_unsigned(cpt,14)); 
             end if;
         end if;
     end process;
 end Behavioral;
+
 
