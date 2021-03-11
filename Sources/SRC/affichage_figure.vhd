@@ -67,7 +67,7 @@ begin
             cstate   <= WAITING_ON;
             cpt_l := 0;
             cpt_c := 0;
-            cpt := 0;
+            cpt_figure := 0;
             --Nb_pixel_HG:= 0;
             --Nb_pixel_BD:=0;
             Nb_HGL:=0;
