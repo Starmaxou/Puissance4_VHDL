@@ -1,8 +1,8 @@
 # Description de la machine à état
 ## Règle du jeu
 - Au début du jeu le plateau est vide,
-- Bleu choisit une colonne où placer le jeton. Le jeton est placer au plus bas dans la colonne selectionnée,
-- Rouge joue de la même manière que Bleu.
+- jaune choisit une colonne où placer le jeton. Le jeton est placer au plus bas dans la colonne selectionnée,
+- Rouge joue de la même manière que jaune.
 ---
 Les joueurs jouent à tour de rôle tant que :
 - Pas de cas de victoire
@@ -19,8 +19,8 @@ L'alignement peut être horizontale, verticale, diagonale.
     **L'appui sur le bouton central démarre la partie**
 
 
-### Bleu joue
-- Affichage du jeton bleu en haut du plateau
+### Jaune joue
+- Affichage du jeton jaune en haut du plateau
 
 - L'appui sur le bouton gauche
     - Déplace le jeton sur la gauche du plateau
@@ -33,7 +33,7 @@ L'alignement peut être horizontale, verticale, diagonale.
     - **Vers test de la victoire**
 
 ### Rouge joue
-- Affichage du jeton bleu en haut du plateau
+- Affichage du jeton jaune en haut du plateau
 
 - L'appui sur le bouton gauche
     - Déplace le jeton sur la gauche du plateau
@@ -49,7 +49,7 @@ L'alignement peut être horizontale, verticale, diagonale.
 - Possible seulement après qu'un joueur est joué 4 fois.
 
 - Si non victoire
-    - **Vers Rouge joue** ou **Vers Bleu joue**
+    - **Vers Rouge joue** ou **Vers jaune joue**
 
 - Si victoire
     - **Vers victoire**
