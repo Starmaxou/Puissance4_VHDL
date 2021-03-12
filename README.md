@@ -6,7 +6,8 @@ La puce FPGA utilisée : xc7a50tcsg324-1
 
 Lien vers le module VGA : http://bornat.vvv.enseirb.fr/wiki/doku.php?id=en202:vga_bitmap
 
-![image](https://user-images.githubusercontent.com/56961627/110907968-6dcf1200-830e-11eb-8c0f-5cf5f0cfa292.png)
+![image](https://user-images.githubusercontent.com/56961627/110908405-0cf40980-830f-11eb-9b8f-ff75ac3ca71b.png)
+
 
 
 
