@@ -26,7 +26,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.ALL;
 
 entity VGA_bitmap_160x100 is
-  generic(bit_per_pixel : integer range 1 to 12:=1;    -- number of bits per pixel
+  generic(bit_per_pixel : integer range 1 to 12:=3;    -- number of bits per pixel
           grayscale     : boolean := false);           -- should data be displayed in grayscale
   port(clk          : in  std_logic;
        reset        : in  std_logic;
