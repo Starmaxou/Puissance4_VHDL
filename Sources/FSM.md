@@ -46,7 +46,8 @@ L'alignement peut être horizontale, verticale, diagonale.
     - **Vers test de la victoire**
 
 ### Test de la victoire
-- Vérification de la proximité de 4 couleurs identiques
+- Possible seulement après qu'un joueur est joué 4 fois.
+
 - Si non victoire
     - **Vers Rouge joue** ou **Vers jaune joue**
 
