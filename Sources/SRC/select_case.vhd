@@ -50,7 +50,8 @@ with C_case select
                             std_logic_vector(to_unsigned(76,8)) when "011",
                             std_logic_vector(to_unsigned(90,8)) when "100",
                             std_logic_vector(to_unsigned(104,8)) when "101",
-                            std_logic_vector(to_unsigned(118,8)) when others;
+                            std_logic_vector(to_unsigned(118,8)) when "110",
+                            std_logic_vector(to_unsigned(0,8)) when others;
 with C_case select                            
     px_BD(15 downto 8) <=   std_logic_vector(to_unsigned(43,8)) when "000",
                             std_logic_vector(to_unsigned(57,8)) when "001",
@@ -58,7 +59,8 @@ with C_case select
                             std_logic_vector(to_unsigned(85,8)) when "011",
                             std_logic_vector(to_unsigned(99,8)) when "100",
                             std_logic_vector(to_unsigned(113,8)) when "101",
-                            std_logic_vector(to_unsigned(127,8)) when others;
+                            std_logic_vector(to_unsigned(127,8)) when "110",
+                            std_logic_vector(to_unsigned(0,8)) when others;
 with L_case select                            
     px_HG(7 downto 0) <=    std_logic_vector(to_unsigned(3,8)) when "000",
                             std_logic_vector(to_unsigned(17,8)) when "001",
@@ -66,7 +68,8 @@ with L_case select
                             std_logic_vector(to_unsigned(45,8)) when "011",
                             std_logic_vector(to_unsigned(59,8)) when "100",
                             std_logic_vector(to_unsigned(73,8)) when "101",
-                            std_logic_vector(to_unsigned(87,8)) when others;
+                            std_logic_vector(to_unsigned(87,8)) when "110",
+                            std_logic_vector(to_unsigned(0,8)) when others;
 with L_case select                            
     px_BD(7 downto 0) <=    std_logic_vector(to_unsigned(12,8)) when "000",
                             std_logic_vector(to_unsigned(26,8)) when "001",
@@ -74,6 +77,7 @@ with L_case select
                             std_logic_vector(to_unsigned(54,8)) when "011",
                             std_logic_vector(to_unsigned(68,8)) when "100",
                             std_logic_vector(to_unsigned(82,8)) when "101",
-                            std_logic_vector(to_unsigned(96,8)) when others;
+                            std_logic_vector(to_unsigned(96,8)) when "110",
+                            std_logic_vector(to_unsigned(0,8)) when others;
                           
 end Behavioral;
