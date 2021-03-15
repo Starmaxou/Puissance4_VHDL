@@ -60,18 +60,20 @@ with C_case select
                             std_logic_vector(to_unsigned(113,8)) when "101",
                             std_logic_vector(to_unsigned(127,8)) when others;
 with L_case select                            
-    px_HG(7 downto 0) <=    std_logic_vector(to_unsigned(17,8)) when "000",
-                            std_logic_vector(to_unsigned(31,8)) when "001",
-                            std_logic_vector(to_unsigned(45,8)) when "010",
-                            std_logic_vector(to_unsigned(59,8)) when "011",
-                            std_logic_vector(to_unsigned(73,8)) when "100",
+    px_HG(7 downto 0) <=    std_logic_vector(to_unsigned(3,8)) when "000",
+                            std_logic_vector(to_unsigned(17,8)) when "001",
+                            std_logic_vector(to_unsigned(31,8)) when "010",
+                            std_logic_vector(to_unsigned(45,8)) when "011",
+                            std_logic_vector(to_unsigned(59,8)) when "100",
+                            std_logic_vector(to_unsigned(73,8)) when "101",
                             std_logic_vector(to_unsigned(87,8)) when others;
 with L_case select                            
-    px_BD(7 downto 0) <=    std_logic_vector(to_unsigned(26,8)) when "000",
-                            std_logic_vector(to_unsigned(40,8)) when "001",
-                            std_logic_vector(to_unsigned(54,8)) when "010",
-                            std_logic_vector(to_unsigned(68,8)) when "011",
-                            std_logic_vector(to_unsigned(82,8)) when "100",
+    px_BD(7 downto 0) <=    std_logic_vector(to_unsigned(12,8)) when "000",
+                            std_logic_vector(to_unsigned(26,8)) when "001",
+                            std_logic_vector(to_unsigned(40,8)) when "010",
+                            std_logic_vector(to_unsigned(54,8)) when "011",
+                            std_logic_vector(to_unsigned(68,8)) when "100",
+                            std_logic_vector(to_unsigned(82,8)) when "101",
                             std_logic_vector(to_unsigned(96,8)) when others;
                           
 end Behavioral;
