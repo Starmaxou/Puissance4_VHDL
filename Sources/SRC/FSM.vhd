@@ -32,9 +32,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity FSM is
-    Port ( CE : in STD_LOGIC;
-           H : in STD_LOGIC;
-           RST : in STD_LOGIC);
+    Port ( CE                   : in STD_LOGIC;
+           H                    : in STD_LOGIC;
+           RST                  : in STD_LOGIC;
+           btnL                 : in STD_LOGIC;
+           btnC                 : in STD_LOGIC;
+           btnR                 : in STD_LOGIC;
+           A_read_type_piece    : in STD_LOGIC;
+           B_affichage_ready    : in STD_LOGIC;
+           C_state_victoire     : in STD_LOGIC;
+           
+           D_ligne_grille       : out STD_LOGIC;
+           E_colonne_grille     : out STD_LOGIC;
+           F_write_type_piece   : out STD_LOGIC
+           );
 end FSM;
 
 architecture Behavioral of FSM is
