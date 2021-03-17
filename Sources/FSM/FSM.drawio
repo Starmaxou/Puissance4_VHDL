@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-15T15:14:54.308Z" agent="5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36" etag="X-Ii_BO-0vzSwsq3clIN" version="14.4.8" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-17T12:53:25.299Z" agent="5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="Ns0mmmlKcmWGGZAGrXGF" version="14.4.8" type="github">
   <diagram id="bEFQcb182ed3f7Ahv94X" name="Page-1">
-    <mxGraphModel dx="1102" dy="557" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1102" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -160,31 +160,31 @@
         <mxCell id="QCsVu8LkWjsdcoAXNAV4-40" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="350" y="255" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-5" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-5" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="414" y="435" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-6" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-6" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="486" y="435" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-8" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-8" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="450" y="465" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-9" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-9" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="450" y="555" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-10" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-10" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="414" y="645" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-11" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-11" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="486" y="645" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-12" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-12" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="450" y="670" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-13" value="" style="line;strokeWidth=2;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-13" value="" style="line;strokeWidth=2;html=1;" parent="1" vertex="1">
           <mxGeometry x="450" y="775" width="20" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="Lglk77GGeg5Cw8dsw8CS-14" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;Liste des signaux&lt;/u&gt;&lt;/div&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;Sortie&lt;/b&gt;&lt;/div&gt;&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;D : Ligne_grille&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;E : Colonne_grille&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;F : write_type_piece&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;G : RW_plateau&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;H : en_verif&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;I : init_verif&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;J : en_affichage&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;K : num_figure_affichage&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;Entrées&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnReset&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnL&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnC&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnR&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;A : read_type_pièce&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;B : affichage_ready&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;C : state_victoire&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="Lglk77GGeg5Cw8dsw8CS-14" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;Liste des signaux&lt;/u&gt;&lt;/div&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;Sortie&lt;/b&gt;&lt;/div&gt;&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;D : Ligne_grille&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;E : Colonne_grille&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;F : write_type_piece&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;G : RW_plateau&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;H : en_verif&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;I : init_verif&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;J : en_affichage&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;K : sel_LC&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;Entrées&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnReset&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnL&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnC&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;btnR&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;A : read_type_pièce&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;B : affichage_ready&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;C : state_victoire&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="60" y="580" width="160" height="280" as="geometry" />
         </mxCell>
       </root>
