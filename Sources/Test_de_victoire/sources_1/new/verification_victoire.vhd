@@ -49,7 +49,7 @@ entity verification_victoire is
 end verification_victoire;
 
 architecture Behavioral of verification_victoire is
- TYPE STATE_TYPE IS (INIT_STATE_ON,INIT_STATE_OFF,CHECK_LIGNE,CHECK_COLONNE,CHECK_DIAGONALE1,CHECK_DIAGONALE2,CHECK_DIAGONALE3,CHECK_DIAGONALE4,CHECK_DIAGONALE5,CHECK_DIAGONALE6);
+ TYPE STATE_TYPE IS (INIT_STATE_ON,INIT_STATE_OFF,SEND,CHECK_LIGNE,CHECK_COLONNE,CHECK_DIAGONALE_G1,CHECK_DIAGONALE_G2,CHECK_DIAGONALE_G3,CHECK_DIAGONALE_G4,CHECK_DIAGONALE_G5,CHECK_DIAGONALE_G6,CHECK_DIAGONALE_D1,CHECK_DIAGONALE_D2,CHECK_DIAGONALE_D3,CHECK_DIAGONALE_D4,CHECK_DIAGONALE_D5,CHECK_DIAGONALE_D6);
  SIGNAL cstate : STATE_TYPE;
  
 begin
@@ -101,24 +101,11 @@ begin
                                      end if;
                                      cstate <=CHECK_LIGNE;
                                   end if;
-                                  if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;      
                           WHEN CHECK_COLONNE =>
                                   if(cpt_l = 5 and cpt_c=6)then
                                     cpt_c:=0;
                                     cpt_l:=2;
-                                    cstate <= CHECK_DIAGONALE1;
+                                    cstate <= CHECK_DIAGONALE_G1;
                                   else
                                      if(cpt_l=5) then
                                           cpt_c := cpt_c + 1;
@@ -128,200 +115,174 @@ begin
                                      end if;
                                      cstate <=CHECK_COLONNE;
                                   end if;
-                                  if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;                                     
                                   
-                           WHEN CHECK_DIAGONALE1=>
+                           WHEN CHECK_DIAGONALE_G1=>
+                           
+                           
                                   if(cpt_c = 3 and cpt_l=5)then
                                     cpt_c:=0;
                                     cpt_l:=1;
-                                    cstate <= CHECK_DIAGONALE2;
+                                    cstate <= CHECK_DIAGONALE_G2;
                                   else
-                                     if(cpt_l=5) then
                                           cpt_c := cpt_c + 1;
-                                          cpt_l:=0;
-                                     else
                                           cpt_l := cpt_l + 1;
-                                     end if;
-                                     cstate <=CHECK_DIAGONALE1;
+                                     cstate <=CHECK_DIAGONALE_G1;
                                   end if;
-                                   if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;                                 
-                           WHEN CHECK_DIAGONALE2=>
+                                  
+                           WHEN CHECK_DIAGONALE_G2=>
                                   if(cpt_c = 4 and cpt_l=5)then
                                     cpt_c:=0;
                                     cpt_l:=0;
-                                    cstate <= CHECK_DIAGONALE3;
+                                    cstate <= CHECK_DIAGONALE_G3;
                                   else
-                                     if(cpt_l=5) then
                                           cpt_c := cpt_c + 1;
-                                          cpt_l:=0;
-                                     else
                                           cpt_l := cpt_l + 1;
-                                     end if;
-                                     cstate <=CHECK_DIAGONALE2;
+                                     cstate <=CHECK_DIAGONALE_G2;
                                   end if;
-                                   if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;                                 
-                           WHEN CHECK_DIAGONALE3=>
-                                  if(cpt_c = 5 and cpt_l=5)then
+                                  
+                           WHEN CHECK_DIAGONALE_G3=>
+                               if(cpt_c = 5 and cpt_l=5)then
                                     cpt_c:=1;
                                     cpt_l:=0;
-                                    cstate <= CHECK_DIAGONALE4;
-                                  else
-                                     if(cpt_l=5) then
+                                    cstate <= CHECK_DIAGONALE_G4;
+                               else
                                           cpt_c := cpt_c + 1;
-                                          cpt_l:=0;
-                                     else
                                           cpt_l := cpt_l + 1;
-                                     end if;
-                                     cstate <=CHECK_DIAGONALE3;
-                                  end if;
-                                   if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;                                 
-                           WHEN CHECK_DIAGONALE4=>
-                                  if(cpt_c = 6 and cpt_l=5)then
+                                     cstate <=CHECK_DIAGONALE_G3;
+                               end if;
+                                      
+                                                                                            
+                           WHEN CHECK_DIAGONALE_G4=>
+                               if(cpt_c = 6 and cpt_l=5)then
                                     cpt_c:=2;
                                     cpt_l:=0;
-                                    cstate <= CHECK_DIAGONALE5;
-                                  else
-                                     if(cpt_l=5) then
+                                    cstate <= CHECK_DIAGONALE_G5;
+                               else
                                           cpt_c := cpt_c + 1;
-                                          cpt_l:=0;
-                                     else
                                           cpt_l := cpt_l + 1;
-                                     end if;
-                                     cstate <=CHECK_DIAGONALE4;
-                                  end if;
-                                   if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;                                 
-                           WHEN CHECK_DIAGONALE5=>
-                                  if(cpt_c = 6 and cpt_l=4)then
+                                     cstate <=CHECK_DIAGONALE_G4;
+                               end if;
+                                 
+                                 
+                           WHEN CHECK_DIAGONALE_G5=>
+                               if(cpt_c = 6 and cpt_l=4)then
                                     cpt_c:=3;
                                     cpt_l:=0;
-                                    cstate <= CHECK_DIAGONALE6;
-                                  else
-                                     if(cpt_l=4) then
+                                    cstate <= CHECK_DIAGONALE_G6;
+                               else
                                           cpt_c := cpt_c + 1;
-                                          cpt_l:=0;
-                                     else
                                           cpt_l := cpt_l + 1;
-                                     end if;
-                                     cstate <=CHECK_DIAGONALE5;
-                                  end if;  
-                                  if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                       end if;
-                                   else
-                                       if( in_data="01")then --jaune
-                                            cpt_piece:=cpt_piece+1;
-                                       else
-                                            cpt_piece:=0;
-                                      end if;
-                                   end if;                                  
-                           WHEN CHECK_DIAGONALE6=>
-                                  if(cpt_c = 6 and cpt_l=3)then
-                                    if(cpt_couleur=1)then
+                                     cstate <=CHECK_DIAGONALE_G5;
+                               end if;
+                               
+                            WHEN CHECK_DIAGONALE_G6=>
+                               if(cpt_c = 6 and cpt_l=3)then
+                                    cpt_c:=6;
+                                    cpt_l:=2;
+                                    cstate <= CHECK_DIAGONALE_D1;
+                               else
+                                          cpt_c := cpt_c + 1;
+                                          cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_G6;
+                               end if;
+                           WHEN CHECK_DIAGONALE_D1=>
+                                if(cpt_c = 3 and cpt_l=5)then
+                                    cpt_c:=6;
+                                    cpt_l:=1;
+                                    cstate <= CHECK_DIAGONALE_D2;
+                               else
+                                          cpt_c := cpt_c - 1;
+                                          cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_D1;
+                               end if;
+                           
+                           WHEN CHECK_DIAGONALE_D2=>
+                              if(cpt_c = 2 and cpt_l=5)then
+                                    cpt_c:=6;
+                                    cpt_l:=0;
+                                    cstate <= CHECK_DIAGONALE_D3;
+                               else
+                                          cpt_c := cpt_c - 1;
+                                          cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_D2;
+                               end if;
+                           WHEN CHECK_DIAGONALE_D3=>
+                               if(cpt_c = 1 and cpt_l=5)then
+                                    cpt_c:=5;
+                                    cpt_l:=0;
+                                    cstate <= CHECK_DIAGONALE_D4;
+                               else
+                                          cpt_c := cpt_c - 1;
+                                          cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_D3;
+                               end if;
+                               
+                           WHEN CHECK_DIAGONALE_D4=>   
+                               if(cpt_c = 0 and cpt_l=5)then
+                                    cpt_c:=4;
+                                    cpt_l:=0;
+                                    cstate <= CHECK_DIAGONALE_D5;
+                               else
+                                          cpt_c := cpt_c - 1;
+                                          cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_D4;
+                               end if;                                         
+                          WHEN CHECK_DIAGONALE_D5=>           
+                                if(cpt_c = 0 and cpt_l=4)then
+                                    cpt_c:=3;
+                                    cpt_l:=0;
+                                    cstate <= CHECK_DIAGONALE_D6;
+                               else
+                                          cpt_c := cpt_c - 1;
+                                          cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_D5;
+                               end if;              
+                                                                               
+                                                                 
+                           WHEN CHECK_DIAGONALE_D6=>
+                               if(cpt_c = 0 and cpt_l=3)then
+                                   if(cpt_couleur=1)then
                                         cpt_c:=0;
                                         cpt_l:=0;
-                                        cpt_couleur:=0;
                                         out_victoire<="11"; --pas de victoire
-                                       cstate <= INIT_STATE_ON;
-                                    else
+                                        cstate <= SEND;
+                                   else
                                         cpt_c:=0;
                                         cpt_l:=0;
                                         cpt_couleur:=cpt_couleur+1;
                                         cstate <= CHECK_LIGNE;
-                                    end if;
-                                  else
-                                     if(cpt_l=3) then
-                                          cpt_c := cpt_c + 1;
-                                          cpt_l:=0;
-                                     else
-                                          cpt_l := cpt_l + 1;
-                                     end if;
-                                     cstate <=CHECK_DIAGONALE6;
-                                  end if; 
-                                  if(cpt_couleur=0)then
-                                       if( in_data="10")then --rouge
+                                   end if;
+                               else
+                                     cpt_c := cpt_c - 1;
+                                     cpt_l := cpt_l + 1;
+                                     cstate <=CHECK_DIAGONALE_D6;
+                               end if;
+                           WHEN SEND=>
+                                    cstate <=INIT_STATE_ON;
+                           
+                           END CASE;      
+                           if(cstate /= INIT_STATE_ON and cstate /= SEND) then
+                                if(cpt_couleur=0)then
+                                       if( in_data="10")then --jaune
                                             cpt_piece:=cpt_piece+1;
                                        else
                                             cpt_piece:=0;
                                        end if;
                                    else
-                                       if( in_data="01")then --jaune
+                                       if( in_data="01")then --rouge
                                             cpt_piece:=cpt_piece+1;
                                        else
                                             cpt_piece:=0;
                                       end if;
-                                   end if;                                  
-                           END CASE;      
-                           
+                                end if;     
+                           end if;  
                            if(cpt_piece =4)then
-                                 cstate <= INIT_STATE_ON;
-                              if(cpt_couleur=0)then --rouge
+                              if(cpt_couleur=0)then --jaune
                                 out_victoire<="10";
                               else
-                                out_victoire<="01"; --jaune
+                                out_victoire<="01"; --rouge
                               end if;
+                              cstate <= SEND;
                            end if;                                                         
                     addr_grille_c_out <= std_logic_vector(to_unsigned(cpt_c, 3));
                     addr_grille_l_out <= std_logic_vector(to_unsigned(cpt_l, 3));
