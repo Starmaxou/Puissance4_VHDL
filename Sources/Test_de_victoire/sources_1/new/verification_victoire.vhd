@@ -120,7 +120,7 @@ begin
                                     cpt_l:=2;
                                     cstate <= CHECK_DIAGONALE1;
                                   else
-                                     if(cpt_l=6) then
+                                     if(cpt_l=5) then
                                           cpt_c := cpt_c + 1;
                                           cpt_l:=0;
                                      else
