@@ -49,8 +49,7 @@ architecture Behavioral of compteur_test_victoire is
 begin
     process(H,RST)
     variable cpt_c: integer range 0 to 6;
-    variable cpt_l: integer range 0 to 5;
-    variable cpt_value: integer range 0 to 15999;
+    variable cpt_l: integer range 0 to 6;
     variable flag   : boolean := false;
     begin
         if(RST = '1') then
@@ -68,7 +67,7 @@ begin
                       cpt_l:=0;
                       flag:=true;
                 elsif(en_cpt = '1' and flag=true) then
-                  if(cpt_l = 5 and cpt_c=6)then
+                  if(cpt_l = 6 and cpt_c=6)then
                      out_check_victoire<='1'; 
                      flag:=false;              
                   else

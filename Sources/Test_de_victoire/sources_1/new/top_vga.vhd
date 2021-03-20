@@ -52,12 +52,15 @@ architecture Behavioral of top_affichage is
     signal ADDR_reg: std_logic_vector(13 downto 0);
     signal data_RGB: std_logic_vector(2 downto 0);
     signal dataout: std_logic_vector(2 downto 0);
-    signal R_W: std_logic;
-    signal ADDR_affichage_W: std_logic_vector(13 downto 0);
+    signal R_W_D: std_logic;
+    signal R_W_Q: std_logic;
+    signal ADDR_affichage_W_in: std_logic_vector(13 downto 0);
+    signal ADDR_affichage_W_out: std_logic_vector(13 downto 0);
     signal ADDR_affichage_R: std_logic_vector(13 downto 0);
     signal figure_RGB: std_logic_vector(2 downto 0);
     signal NOT_R_W: std_logic;
     signal ADDR_fig: std_logic_vector(13 downto 0);
+    
 begin
     
     compteur : entity  work.compteur
@@ -72,9 +75,9 @@ begin
                 
         mux : entity  work.mux
            port map (
-                sel_mux =>R_W,
+                sel_mux =>R_W_Q,
                 in_data0 =>ADDR_affichage_R,
-                in_data1 => ADDR_affichage_W,
+                in_data1 => ADDR_affichage_W_out,
                 out_data =>ADDR
                 );   
                 
@@ -86,13 +89,32 @@ begin
                     reset=>reset,
                     out_data=> ADDR_reg);
                     
+     
+                    
+     reg2 : entity work.registre  
+        port map(
+                    in_data => ADDR_affichage_W_in,
+                    ce =>'1',
+                    clk =>clk100M,
+                    reset=>reset,
+                    out_data=> ADDR_affichage_W_out);
+                
+                
+    bascule_D : entity work.bascule_D 
+        port map(
+                   
+                    ce =>'1',
+                    clk =>clk100M,
+                    reset=>reset,
+                    D=>R_W_D, 
+                    Q=>R_W_Q);    
     
                     
     
      men_affichage : entity work.memoire
         port map(
                 en_men=>'1',
-                R_W =>R_W,
+                R_W =>R_W_Q,
                 ce=>'1',
                 clk=>clk100M,
                 in_adr=>ADDR,
@@ -117,9 +139,9 @@ begin
             in_HG =>in_HG,
             in_BD => in_BD,
             in_affichage_en=> in_affichage_en,
-            out_adr =>ADDR_affichage_W,
+            out_adr =>ADDR_affichage_W_in,
             out_adr_figure => ADDR_fig,
-            out_R_W=>R_W);
+            out_R_W=>R_W_D);
   
      VGA: entity  work.VGA_bitmap_160x100
       port map (
@@ -136,7 +158,7 @@ begin
        data_write   =>NOT_R_W,
        data_out => dataout
                 );
-        NOT_R_W<=not(R_W);
+        NOT_R_W<=not(R_W_Q);
         Write_ready_out<=NOT_R_W;
 end Behavioral;
 

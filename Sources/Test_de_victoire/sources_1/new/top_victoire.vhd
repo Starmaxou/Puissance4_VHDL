@@ -47,8 +47,7 @@ end top_victoire;
 architecture Behavioral of top_victoire is
     signal HG: std_logic_vector(15 downto 0);
     signal BD: std_logic_vector(15 downto 0);
-    signal num_figure: std_logic_vector(2 downto 0);
-    signal type_piece: std_logic_vector(1 downto 0);
+    signal type_piece: std_logic_vector(2 downto 0);
     signal out_addr_L: std_logic_vector(2 downto 0);
     signal out_addr_C: std_logic_vector(2 downto 0);
     signal compteur_addr_L: std_logic_vector(2 downto 0);
@@ -102,7 +101,7 @@ begin
           in_HG=>HG,
           in_BD=>BD,
           in_affichage_en=>En_affichage,
-          num_figure=>num_figure,
+          num_figure=>type_piece,
           VGA_R=>VGA_R,
           VGA_B=>VGA_B,
           VGA_G=>VGA_G,
@@ -118,17 +117,13 @@ begin
            px_HG =>HG,
            px_BD =>BD
          );
-   grille_to_figure: entity   work.grille_to_figure
-         port map (
-           in_piece => type_piece,
-           out_num_figure => num_figure
-         );
+
     grille: entity   work.grille
          port map (
            clk =>clk100M,
            ce =>'1',
            en_mem=>'1',
-           in_data =>"00",
+           in_data =>"000",
            R_W =>'0',
            addr_grille_c =>out_addr_C,
            addr_grille_l =>out_addr_L,

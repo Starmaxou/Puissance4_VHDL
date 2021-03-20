@@ -16,7 +16,7 @@ architecture tb of tb_affichage_figure is
               in_BD           : in std_logic_vector (15 downto 0);
               in_affichage_en : in std_logic;
               out_adr         : out std_logic_vector (13 downto 0);
-              out_adr_firgure : out std_logic_vector (13 downto 0);
+              out_adr_figure : out std_logic_vector (13 downto 0);
               out_R_W         : out std_logic);
     end component;
 
@@ -27,7 +27,7 @@ architecture tb of tb_affichage_figure is
     signal in_BD           : std_logic_vector (15 downto 0);
     signal in_affichage_en : std_logic;
     signal out_adr         : std_logic_vector (13 downto 0);
-    signal out_adr_firgure : std_logic_vector (13 downto 0);
+    signal out_adr_figure : std_logic_vector (13 downto 0);
     signal out_R_W         : std_logic;
 
     constant TbPeriod : time := 1 ns; -- EDIT Put right period here
@@ -44,7 +44,7 @@ begin
               in_BD           => in_BD,
               in_affichage_en => in_affichage_en,
               out_adr         => out_adr,
-              out_adr_firgure => out_adr_firgure,
+              out_adr_figure => out_adr_figure,
               out_R_W         => out_R_W);
 
     -- Clock generation
@@ -73,19 +73,19 @@ begin
         wait for 2 ns;
         in_affichage_en <= '0';
         -- EDIT Add stimuli here
-        wait for 100 * TbPeriod;
+        wait for 200 * TbPeriod;
         in_BD <= "0000000000000000";--C=0 L=0
         in_HG <= "0000100100001001";--C=9 L=9
         in_affichage_en <= '1';
         wait for 2 ns;
         in_affichage_en <= '0';
-        wait for 100 * TbPeriod;
+        wait for 200 * TbPeriod;
         in_affichage_en <= '1';
-        in_HG <= "0000000000000000";--C=0 L=0
-        in_BD <= "0000100100001001";--C=9 L=9
+        in_HG <= X"2203";--C=0 L=0
+        in_BD <= X"2b0c";--C=9 L=9
         wait for 2 ns;
         in_affichage_en <= '0';
-        wait for 100 * TbPeriod;
+        wait for 1000 * TbPeriod;
         
 
         -- Stop the clock and hence terminate the simulation

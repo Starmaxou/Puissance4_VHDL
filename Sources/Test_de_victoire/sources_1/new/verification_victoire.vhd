@@ -37,7 +37,7 @@ entity verification_victoire is
            ce : in STD_LOGIC;
            en_verif : in STD_LOGIC;
            init_state : in STD_LOGIC;
-           in_data : in STD_LOGIC_VECTOR (1 downto 0);
+           in_data : in STD_LOGIC_VECTOR (2 downto 0);
            addr_grille_c_out : out STD_LOGIC_VECTOR (2 downto 0);
            addr_grille_l_out : out STD_LOGIC_VECTOR (2 downto 0);
            --out_piece1_CL : out STD_LOGIC_VECTOR (5 downto 0);
@@ -92,7 +92,7 @@ begin
                             if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_l = X"05" and cpt_c=X"06")then
+                                    if(cpt_l = X"06" and cpt_c=X"06")then
                                          nx_state <= CHECK_COLONNE;
                                     else
                                          nx_state <= CHECK_LIGNE;
@@ -103,7 +103,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                  if(cpt_l = X"05" and cpt_c=X"06")then
+                                  if(cpt_l = X"06" and cpt_c=X"06")then
                                          nx_state <= CHECK_DIAGONALE_G1;
                                   else
                                          nx_state <= CHECK_COLONNE;
@@ -114,7 +114,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                  if(cpt_c = X"03" and cpt_l=X"05")then
+                                  if(cpt_c = X"03" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_G2;
                                   else
                                          nx_state <= CHECK_DIAGONALE_G1;
@@ -125,7 +125,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"04" and cpt_l=X"05")then
+                                    if(cpt_c = X"04" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_G3;
                                     else
                                          nx_state <= CHECK_DIAGONALE_G2;
@@ -136,7 +136,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"05" and cpt_l=X"05")then
+                                    if(cpt_c = X"05" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_G4;
                                     else
                                          nx_state <= CHECK_DIAGONALE_G3;
@@ -147,7 +147,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"06" and cpt_l=X"05")then
+                                    if(cpt_c = X"06" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_G5;
                                     else
                                          nx_state <= CHECK_DIAGONALE_G4;
@@ -158,7 +158,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"06" and cpt_l=X"04")then
+                                    if(cpt_c = X"06" and cpt_l=X"05")then
                                          nx_state <= CHECK_DIAGONALE_G6;
                                     else
                                          nx_state <= CHECK_DIAGONALE_G5;
@@ -169,7 +169,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"06" and cpt_l=X"03")then
+                                    if(cpt_c = X"06" and cpt_l=X"04")then
                                          nx_state <= CHECK_DIAGONALE_D1;
                                     else
                                          nx_state <= CHECK_DIAGONALE_G6;
@@ -180,7 +180,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                            else
-                                 if(cpt_c = X"03" and cpt_l=X"05")then
+                                 if(cpt_c = X"03" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_D2;
                                  else
                                          nx_state <= CHECK_DIAGONALE_D1;
@@ -191,7 +191,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"02" and cpt_l=X"05")then
+                                    if(cpt_c = X"02" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_D3;
                                     else
                                          nx_state <= CHECK_DIAGONALE_D2;
@@ -202,7 +202,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"01" and cpt_l=X"05")then
+                                    if(cpt_c = X"01" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_D4;
                                     else
                                          nx_state <= CHECK_DIAGONALE_D3;
@@ -213,7 +213,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                    if(cpt_c = X"00" and cpt_l=X"05")then
+                                    if(cpt_c = X"00" and cpt_l=X"06")then
                                          nx_state <= CHECK_DIAGONALE_D5;
                                     else
                                          nx_state <= CHECK_DIAGONALE_D4;
@@ -224,7 +224,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                if(cpt_c = X"00" and cpt_l=X"04")then
+                                if(cpt_c = X"00" and cpt_l=X"05")then
                                          nx_state <= CHECK_DIAGONALE_D6;
                                 else
                                          nx_state <= CHECK_DIAGONALE_D5;
@@ -235,7 +235,7 @@ begin
                            if(cpt_piece4_rouge ="100" or cpt_piece4_jaune="100")then
                                 nx_state <= FIN;
                             else
-                                 if(cpt_c = X"00" and cpt_l=X"03")then
+                                 if(cpt_c = X"00" and cpt_l=X"04")then
                                           nx_state <= FIN;
                                  else
                                          nx_state <= CHECK_DIAGONALE_D6;
@@ -251,22 +251,22 @@ begin
         
     cal_output : process(clk)
      variable Vcpt_c: integer range 0 to 6;
-     variable Vcpt_l: integer range 0 to 5;
+     variable Vcpt_l: integer range 1 to 6;
         begin
          if ( clk' event and clk='1') then
             if(ce = '1') then
             case pr_state is
                 when INIT_STATE_ON =>
                    Vcpt_c:=0;
-                   Vcpt_l:=0;
+                   Vcpt_l:=1;
                 when INIT_STATE_OFF =>
                   Vcpt_c:=0;
-                  Vcpt_l:=0;
+                  Vcpt_l:=1;
                   out_victoire<="00";
                 when CHECK_LIGNE =>
                     
-                        if(Vcpt_l = 5 and Vcpt_c=6)then
-                            Vcpt_l:=0;
+                        if(Vcpt_l = 6 and Vcpt_c=6)then
+                            Vcpt_l:=1;
                             Vcpt_c:=0;
                           
                         else
@@ -281,120 +281,120 @@ begin
                         out_victoire<="00";
                  
                 when CHECK_COLONNE =>
-                      if(Vcpt_l = 5 and Vcpt_c=6)then
+                      if(Vcpt_l = 6 and Vcpt_c=6)then
                         Vcpt_c:=0;
-                        Vcpt_l:=2;                   
+                        Vcpt_l:=3;                   
                       else
-                         if(Vcpt_l=5) then
+                         if(Vcpt_l=6) then
                               Vcpt_c := Vcpt_c + 1;
-                              Vcpt_l:=0;
+                              Vcpt_l:=1;
                          else
                               Vcpt_l := Vcpt_l + 1;
                          end if;
                       end if;
                       out_victoire<="00";
                 when CHECK_DIAGONALE_G1=>
-                      if(Vcpt_c = 3 and Vcpt_l=5)then
+                      if(Vcpt_c = 3 and Vcpt_l=6)then
                         Vcpt_c:=0;
-                        Vcpt_l:=1;
+                        Vcpt_l:=2;
                       else
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                       end if;
                 when CHECK_DIAGONALE_G2=>
-                     if(Vcpt_c = 4 and Vcpt_l=5)then
+                     if(Vcpt_c = 4 and Vcpt_l=6)then
                         Vcpt_c:=0;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;
                      out_victoire<="00";
                 when CHECK_DIAGONALE_G3=>
-                     if(Vcpt_c = 5 and Vcpt_l=5)then
+                     if(Vcpt_c = 5 and Vcpt_l=6)then
                         Vcpt_c:=1;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;  
                      out_victoire<="00";   
                 when CHECK_DIAGONALE_G4=>
-                     if(Vcpt_c = 6 and Vcpt_l=5)then
+                     if(Vcpt_c = 6 and Vcpt_l=6)then
                         Vcpt_c:=2;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
                      out_victoire<="00";                          
                 when CHECK_DIAGONALE_G5=>
-                     if(Vcpt_c = 6 and Vcpt_l=4)then
+                     if(Vcpt_c = 6 and Vcpt_l=5)then
                         Vcpt_c:=3;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;
                      out_victoire<="00";
                 when CHECK_DIAGONALE_G6=>
-                     if(Vcpt_c = 6 and Vcpt_l=3)then
+                     if(Vcpt_c = 6 and Vcpt_l=4)then
                         Vcpt_c:=6;
-                        Vcpt_l:=2;
+                        Vcpt_l:=3;
                      else
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;  
                      out_victoire<="00";                   
                 when CHECK_DIAGONALE_D1=>
-                     if(Vcpt_c = 3 and Vcpt_l=5)then
+                     if(Vcpt_c = 3 and Vcpt_l=6)then
                         Vcpt_c:=6;
-                        Vcpt_l:=1;
+                        Vcpt_l:=2;
                      else
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;  
                      out_victoire<="00";                    
                  when CHECK_DIAGONALE_D2=>
-                     if(Vcpt_c = 2 and Vcpt_l=5)then
+                     if(Vcpt_c = 2 and Vcpt_l=6)then
                         Vcpt_c:=6;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;
                      out_victoire<="00";                 
                 when CHECK_DIAGONALE_D3=>
-                     if(Vcpt_c = 1 and Vcpt_l=5)then
+                     if(Vcpt_c = 1 and Vcpt_l=6)then
                         Vcpt_c:=5;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
                      out_victoire<="00";
                 when CHECK_DIAGONALE_D4=>
-                     if(Vcpt_c = 0 and Vcpt_l=5)then
+                     if(Vcpt_c = 0 and Vcpt_l=6)then
                         Vcpt_c:=4;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
                      out_victoire<="00";
                 when CHECK_DIAGONALE_D5=>
-                     if(Vcpt_c = 0 and Vcpt_l=4)then
+                     if(Vcpt_c = 0 and Vcpt_l=5)then
                         Vcpt_c:=3;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                      else
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
                      out_victoire<="00";
                 when CHECK_DIAGONALE_D6=>
-                     if(Vcpt_c = 0 and Vcpt_l=3)then
+                     if(Vcpt_c = 0 and Vcpt_l=4)then
                           Vcpt_c:=0;
-                          Vcpt_l:=0;
+                          Vcpt_l:=1;
                      else
                           Vcpt_c := Vcpt_c - 1;
                           Vcpt_l := Vcpt_l + 1;
@@ -403,7 +403,7 @@ begin
        
                 when FIN=> 
                         Vcpt_c:=0;
-                        Vcpt_l:=0;
+                        Vcpt_l:=1;
                         out_victoire<="00";
                 when SEND=> 
                     
@@ -416,7 +416,7 @@ begin
                             out_victoire<="11";
                      end if;
                     Vcpt_c:=0;
-                    Vcpt_l:=0;
+                    Vcpt_l:=1;
                                                
                     
                 
@@ -436,7 +436,7 @@ begin
             
                      if( pr_state /=INIT_STATE_ON and pr_state /=INIT_STATE_OFF and pr_state /=SEND)then
                             if(cpt_piece_jaune<4) then
-                               if( in_data="10")then --jaune
+                               if( in_data="011")then --jaune
                                  
                                     cpt_piece_jaune:=cpt_piece_jaune+ 1;
                                else
@@ -446,7 +446,7 @@ begin
                                end if;
                             end if;
                             if(cpt_piece_rouge<4) then
-                               if( in_data="01")then --rouge
+                               if( in_data="100")then --rouge
                                     cpt_piece_rouge:=cpt_piece_rouge+1;
                                else
                                    if(cpt_piece_rouge<4)then
