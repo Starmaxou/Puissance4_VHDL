@@ -16,11 +16,11 @@ architecture tb of tb_verification_victoire is
               ce                : in std_logic;
               en_verif          : in std_logic;
               init_state        : in std_logic;
-              in_data           : in std_logic_vector (1 downto 0);
+              in_data           : in std_logic_vector (2 downto 0);
               addr_grille_c_out : out std_logic_vector (2 downto 0);
               addr_grille_l_out : out std_logic_vector (2 downto 0);
-              out_victoire      : out std_logic_vector (1 downto 0);
-              out_test          : out std_logic);
+              out_victoire      : out std_logic_vector (1 downto 0)
+             );
     end component;
 
     signal clk               : std_logic;
@@ -28,7 +28,7 @@ architecture tb of tb_verification_victoire is
     signal ce                : std_logic;
     signal en_verif          : std_logic;
     signal init_state        : std_logic;
-    signal in_data           : std_logic_vector (1 downto 0);
+    signal in_data           : std_logic_vector (2 downto 0);
     signal addr_grille_c_out : std_logic_vector (2 downto 0);
     signal addr_grille_l_out : std_logic_vector (2 downto 0);
     signal out_victoire      : std_logic_vector (1 downto 0);
@@ -49,8 +49,8 @@ begin
               in_data           => in_data,
               addr_grille_c_out => addr_grille_c_out,
               addr_grille_l_out => addr_grille_l_out,
-              out_victoire      => out_victoire,
-              out_test          => out_test);
+              out_victoire      => out_victoire
+              );
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
@@ -72,7 +72,7 @@ begin
         wait for 100 ns;
         reset <= '0';
         wait for 100 ns;
-        in_data <= "10";
+        in_data <= "100";
         init_state <= '1';
         wait for 5 ns;
         init_state <= '0';

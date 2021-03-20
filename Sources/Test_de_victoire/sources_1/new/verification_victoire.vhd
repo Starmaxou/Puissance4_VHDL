@@ -329,6 +329,15 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                       end if;
+                     out_victoire<="00";
+                     out_piece4_LC<= "0000000000000000";
+                     out_piece3_LC<= "0000000000000000";
+                     out_piece2_LC<= "0000000000000000";
+                     out_piece1_LC<= "0000000000000000";
+                     out_piece4_LC<= "0000000000000000";
+                     out_piece3_LC<= "0000000000000000";
+                     out_piece2_LC<= "0000000000000000";
+                     out_piece1_LC<= "0000000000000000";        
                 when CHECK_DIAGONALE_G2=>
                      if(Vcpt_c = 4 and Vcpt_l=6)then
                         Vcpt_c:=0;
@@ -530,7 +539,7 @@ begin
                         out_piece1_LC<= "0000000000000000";  
                 when SEND=> 
                     
-                     if(cpt_piece4_jaune ="100")then--4
+                     if(cpt_piece4_jaune ="100") then--4
                             out_victoire<="10";
                      
                      elsif(cpt_piece4_rouge ="100")then --4
@@ -575,7 +584,7 @@ begin
             
                      if( pr_state /=INIT_STATE_ON and pr_state /=INIT_STATE_OFF and pr_state /=SEND)then
                             if(cpt_piece_jaune<4) then
-                               if( in_data="011")then --jaune
+                               if( in_data="110")then --jaune
                                  
                                     cpt_piece_jaune:=cpt_piece_jaune+ 1;
                                else
@@ -585,7 +594,7 @@ begin
                                end if;
                             end if;
                             if(cpt_piece_rouge<4) then
-                               if( in_data="100")then --rouge
+                               if( in_data="010")then --rouge
                                     cpt_piece_rouge:=cpt_piece_rouge+1;
                                else
                                    if(cpt_piece_rouge<4)then

@@ -64,6 +64,10 @@ architecture Behavioral of top_victoire is
     signal en_verif: std_logic;
     signal init_verif: std_logic;
     signal sel_ADDR: std_logic;
+    signal  out_piece1_LC: std_logic_vector(15 downto 0);
+    signal  out_piece2_LC: std_logic_vector(15 downto 0);
+    signal  out_piece3_LC: std_logic_vector(15 downto 0);
+    signal  out_piece4_LC: std_logic_vector(15 downto 0);
 begin
         mux_L: entity  work.mux_L_C
         port map (
@@ -152,10 +156,10 @@ begin
            in_data =>type_piece,
            addr_grille_c_out =>verif_addr_C,
            addr_grille_l_out =>verif_addr_L,
-           --out_piece1_CL : out STD_LOGIC_VECTOR (5 downto 0);
-           --out_piece2_CL : out STD_LOGIC_VECTOR (5 downto 0);
-           --out_piece3_CL : out STD_LOGIC_VECTOR (5 downto 0);
-           --out_piece4_CL : out STD_LOGIC_VECTOR (5 downto 0);
+           out_piece1_LC =>out_piece1_LC,
+           out_piece2_LC =>out_piece2_LC,
+           out_piece3_LC =>out_piece3_LC,
+           out_piece4_LC =>out_piece4_LC,
            out_victoire=>victoire
           
           
