@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -57,9 +57,10 @@ architecture Behavioral of FSM is
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
-	signal pr_player : Joueur := Joueur_Rouge;
+	signal pr_player, nx_player : Joueur := Joueur_Rouge;
 	
 	signal btn : std_logic := '0';
+	signal position : unsigned (2 downto 0) := "001"; 
 begin
 ------ 
 -- Mise à jour synchrone des etats
@@ -84,7 +85,7 @@ begin
                     pr_player <= nx_player;
                 end if;
             end if;
-        end process maj_etat;
+        end process maj_joueur;
 
 ------
 -- Calcul du nouvel etat en fonction des entrées
@@ -93,9 +94,10 @@ begin
         begin
             case pr_state is
                 when Etat_Init =>
-                    nx_state <= Etat_Affichage_jeu;
+                    nx_state <= Etat_Init_grille;
                     
-                --when Etat_Init_grille =>
+                when Etat_Init_grille =>
+                    nx_state <= Etat_Affichage_jeu;
                     
                 when Etat_Affichage_jeu =>
                     if( btnC = '1' ) then
@@ -110,27 +112,48 @@ begin
                 
                 when Etat_Effacer_pos =>
                     -- Ajouter vérification d'écriture de la case blanche
+                    -- Effacement du jeton à la position actuelle
                     if( btn = '1' ) then
                         nx_state <= Etat_Incrementer;
                     else
-                        nx_statue <= Etat_Decrementer;
+                        nx_state <= Etat_Decrementer;
+                    end if;
                 
-                --when Etat_Incrementer =>
+                when Etat_Incrementer =>
+                    btn <= '0';
+                    position := position + 1;
+                    nx_state <= Etat_Ecriture_pos;
+                    
+                when Etat_Decrementer =>
+                    position := position - 1;
+                    nx_state <= Etat_Ecriture_pos;
                 
-                --when Etat_Decrementer =>
+                when Etat_Ecriture_pos =>
+                    -- Affichage de la nouvelle position du jeton
+                    nx_state <= Etat_Affichage_jeu;
                 
-                --when Etat_Ecriture_pos =>
+                when Etat_Check_mouv =>
+                    nx_state <= Etat_Ecriture_mouv;
                 
-                --when Etat_Check_mouv =>
+                when Etat_Ecriture_mouv =>
+                    nx_state <= Etat_Check_victoire;
                 
-                --when Etat_Ecriture_mouv =>
-                
-                --when Etat_Check_victoire =>
+                when Etat_Check_victoire =>
+                    case pr_player is
+                        when Joueur_Rouge =>
+                            nx_player <= Joueur_Jaune;
+                        when Joueur_Jaune =>
+                            nx_player <= Joueur_Rouge;
+                    end case;
+                    nx_state <= Etat_Affichage_jeu;
                                 
-                --when Etat_Victoire =>
+                when Etat_Victoire =>
+                    if( btnC = '1' ) then
+                        nx_state <= Etat_Init;
+                    end if;
                     
                 when others =>
-                    nx_state <= Etat_init;
+                    nx_state <= Etat_Init_grille;
             end case;
         end process cal_nx_state;
 
