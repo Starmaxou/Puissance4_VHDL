@@ -59,8 +59,13 @@ architecture Behavioral of FSM is
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
 	signal pr_player, nx_player : Joueur := Joueur_Rouge;
 	
-	signal btn : std_logic := '0';
-	signal position : unsigned (2 downto 0) := "001"; 
+	signal btn :   std_logic := '0';
+	signal position :  unsigned (2 downto 0) := "001";
+	signal init_grille :   std_logic; 
+	signal ligne_grille :  std_logic_vector (2 downto 0);
+	signal colonne_grille : std_logic_vector (2 downto 0);
+	signal type_piece_grille : std_logic_vector (2 downto 0); 
+	 
 begin
 ------ 
 -- Mise à jour synchrone des etats
@@ -90,14 +95,18 @@ begin
 ------
 -- Calcul du nouvel etat en fonction des entrées
 ------    
-    cal_nx_state : process (pr_state, btnC, btnL, btnR)
+    cal_nx_state : process (pr_state, btnC, btnL, btnR, init_grille)
         begin
             case pr_state is
                 when Etat_Init =>
                     nx_state <= Etat_Init_grille;
                     
                 when Etat_Init_grille =>
-                    nx_state <= Etat_Affichage_jeu;
+                    if ( init_grille = '1') then
+                        nx_state <= Etat_Affichage_jeu;
+                    else
+                        nx_state <= Etat_Init_grille;
+                    end if;
                     
                 when Etat_Affichage_jeu =>
                     if( btnC = '1' ) then
@@ -120,12 +129,9 @@ begin
                     end if;
                 
                 when Etat_Incrementer =>
-                    btn <= '0';
-                    position := position + 1;
                     nx_state <= Etat_Ecriture_pos;
                     
                 when Etat_Decrementer =>
-                    position := position - 1;
                     nx_state <= Etat_Ecriture_pos;
                 
                 when Etat_Ecriture_pos =>
@@ -146,6 +152,7 @@ begin
                             nx_player <= Joueur_Rouge;
                     end case;
                     nx_state <= Etat_Affichage_jeu;
+                    position <= "001";
                                 
                 when Etat_Victoire =>
                     if( btnC = '1' ) then
@@ -160,34 +167,108 @@ begin
 ------
 -- Mise à jours des sorties en fonction de l'état courant
 ------    
-    cal_output : process( pr_state )
+    cal_output : process( pr_state, ligne_grille, colonne_grille, type_piece_grille )
         begin
             case pr_state is
                 when Etat_Init =>
-                    
-                --when Etat_Init_grille =>
-                
+                    C_ligne_grille      <= "000";
+                    D_colonne_grille    <= "000";   
+                    E_write_type_piece  <= "000";
+                    F_RW_plateau        <= '0';
+                    G_en_verif          <= '0';
+                    H_init_verif        <= '0';
+                    I_sel_LC            <= '0';
+                when Etat_Init_grille =>
+                    C_ligne_grille      <= ligne_grille;
+                    D_colonne_grille    <= colonne_grille;   
+                    E_write_type_piece  <= type_piece_grille;
+                    F_RW_plateau        <= '0';
+                    G_en_verif          <= '0';
+                    H_init_verif        <= '0';
+                    I_sel_LC            <= '1';
                 when Etat_Affichage_jeu =>
                 
-                --when Etat_Effacer_pos =>
+                when Etat_Effacer_pos =>
                 
-                --when Etat_Incrementer =>
+                when Etat_Incrementer =>
+                    C_ligne_grille       <= "000";
+                    D_colonne_grille     <= "000";
+                    E_write_type_piece   <= "000";
+                    F_RW_plateau         <= '0';
+                    G_en_verif           <= '0';
+                    H_init_verif         <= '0';
+                    I_sel_LC             <= '1';
+                    
+                    btn <= '0';
+                    position <= position + 1;
+                                    
+                when Etat_Decrementer =>
+                    C_ligne_grille       <= "000";
+                    D_colonne_grille     <= "000";
+                    E_write_type_piece   <= "000";
+                    F_RW_plateau         <= '0';
+                    G_en_verif           <= '0';
+                    H_init_verif         <= '0';
+                    I_sel_LC             <= '1';
+                    
+                    position <= position - 1;
+                     
+                when Etat_Ecriture_pos =>
                 
-                --when Etat_Decrementer =>
-                               
-                --when Etat_Ecriture_pos =>
+                when Etat_Check_mouv =>
                 
-                --when Etat_Check_mouv =>
+                when Etat_Ecriture_mouv =>
                 
-                --when Etat_Ecriture_mouv =>
+                when Etat_Check_victoire =>
+                    C_ligne_grille       <= "000";
+                    D_colonne_grille     <= "000";
+                    E_write_type_piece   <= "000";
+                    F_RW_plateau         <= '0';
+                    G_en_verif           <= '0';
+                    H_init_verif         <= '0';
+                    I_sel_LC             <= '1';
                 
-                --when Etat_Check_victoire =>
-                
-                --when Etat_Victoire =>
+                when Etat_Victoire =>
                 
                 when others =>
                                                                                       
             end case;
         end process cal_output;
+        
+    white_grille : process( H, RST )
+        variable cpt_l : integer range 0 to 7;
+        variable cpt_c : integer range 0 to 6;
+        begin
+            if ( RST = '1') then
+                cpt_l := 0;
+                cpt_c := 0;
+                type_piece_grille <= "000";
+                ligne_grille <= "000";
+                colonne_grille <= "000";
+                init_grille <= '0';
+            elsif ( H'event and H = '1') then
+                if (pr_state = Etat_Init_grille) then
+                    if (cpt_l = 6 and cpt_c = 6) then
+                         init_grille <= '1';
+                    else
+                        if (cpt_c = 6) then
+                            cpt_c := 0;
+                            cpt_l := cpt_l + 1;
+                        end if;
+                        cpt_c := cpt_c + 1;
+                            
+                        init_grille <= '0';      
+                        if (cpt_l = 0) then
+                             type_piece_grille <= "000";
+                        else
+                             type_piece_grille <= "100";
+                        end if;
+                        ligne_grille <= std_logic_vector(to_unsigned(cpt_l, 3));
+                        colonne_grille <= std_logic_vector(to_unsigned(cpt_c, 3));
+                        
+                    end if;
+                end if;
+            end if;
+    end process white_grille;
 
 end Behavioral;

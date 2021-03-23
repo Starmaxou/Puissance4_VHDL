@@ -1,3 +1,7 @@
+-- Testbench automatically generated online
+-- at https://vhdl.lapinoo.net
+-- Generation date : 23.3.2021 16:18:55 UTC
+
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -87,43 +91,6 @@ begin
         wait for 100 ns;
 
         -- EDIT Add stimuli here
-        wait for 2 * TbPeriod;
-        
-        btnL <= '1';
-        wait for 2 * TbPeriod;
-        btnL <= '0';
-        wait for 10 * TbPeriod;
-        
-        btnL <= '1';
-        wait for 2 * TbPeriod;
-        btnL <= '0';
-        wait for 10 * TbPeriod;
-        
-        btnL <= '1';
-        wait for 2 * TbPeriod;
-        btnL <= '0';
-        wait for 10 * TbPeriod;
-                        
-        btnR <= '1';
-        wait for 2 * TbPeriod;
-        btnR <= '0';
-        wait for 10 * TbPeriod;   
-        
-        btnR <= '1';
-        wait for 2 * TbPeriod;
-        btnR <= '0';
-        wait for 10 * TbPeriod; 
-        
-        btnR <= '1';
-        wait for 2 * TbPeriod;
-        btnR <= '0';
-        wait for 10 * TbPeriod; 
-        
-        btnR <= '1';
-        wait for 2 * TbPeriod;
-        btnR <= '0';
-        wait for 10 * TbPeriod; 
-                            
         wait for 100 * TbPeriod;
 
         -- Stop the clock and hence terminate the simulation
