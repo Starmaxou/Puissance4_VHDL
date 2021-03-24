@@ -92,7 +92,41 @@ begin
 
         -- EDIT Add stimuli here
         wait for 100 * TbPeriod;
-
+        
+        btnR <= '1';
+        wait for 2 * TbPeriod;
+        btnR <= '0';
+        wait for 2 * TbPeriod;
+        btnR <= '1';
+        wait for 2 * TbPeriod;
+        btnR <= '0';
+        wait for 2 * TbPeriod;
+        
+        wait for 50 * TbPeriod;
+        
+        btnL <= '1';
+        wait for 2 * TbPeriod;
+        btnL <= '0';
+        wait for 2 * TbPeriod;
+        btnL <= '1';
+        wait for 2 * TbPeriod;
+        btnL <= '0';
+        wait for 2 * TbPeriod;
+        btnL <= '1';
+        wait for 2 * TbPeriod;
+        btnL <= '0';
+        wait for 2 * TbPeriod;        
+        
+        
+        wait for 100 * TbPeriod;
+        
+        btnC <= '1';
+        wait for 2 * TbPeriod;
+        btnC <= '0';
+        wait for 2 * TbPeriod;
+        
+        wait for 100 * TbPeriod;
+        
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
         wait;

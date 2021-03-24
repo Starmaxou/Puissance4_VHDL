@@ -60,7 +60,7 @@ architecture Behavioral of FSM is
 	signal pr_player, nx_player : Joueur := Joueur_Rouge;
 	
 	signal btn :   std_logic := '0';
-	signal position :  unsigned (2 downto 0) := "001";
+	signal position :  unsigned (2 downto 0) := "000";
 	signal init_grille :   std_logic; 
 	signal ligne_grille :  std_logic_vector (2 downto 0);
 	signal colonne_grille : std_logic_vector (2 downto 0);
@@ -152,7 +152,7 @@ begin
                             nx_player <= Joueur_Rouge;
                     end case;
                     nx_state <= Etat_Affichage_jeu;
-                    position <= "001";
+                    
                                 
                 when Etat_Victoire =>
                     if( btnC = '1' ) then
@@ -198,9 +198,6 @@ begin
                     G_en_verif           <= '0';
                     H_init_verif         <= '0';
                     I_sel_LC             <= '1';
-                    
-                    btn <= '0';
-                    position <= position + 1;
                                     
                 when Etat_Decrementer =>
                     C_ligne_grille       <= "000";
@@ -210,11 +207,9 @@ begin
                     G_en_verif           <= '0';
                     H_init_verif         <= '0';
                     I_sel_LC             <= '1';
-                    
-                    position <= position - 1;
                      
                 when Etat_Ecriture_pos =>
-                
+                    
                 when Etat_Check_mouv =>
                 
                 when Etat_Ecriture_mouv =>
@@ -234,6 +229,29 @@ begin
                                                                                       
             end case;
         end process cal_output;
+        
+    update_pos : process ( pr_state )
+        begin
+            case pr_state is
+                when Etat_Incrementer =>
+                    if ( position = "110" ) then
+                        position <= "000";
+                    else 
+                        position <= position + 1;
+                    end if;
+            
+                when Etat_Decrementer =>
+                    if ( position = "000" ) then
+                        position <= "110";
+                    else
+                        position <= position - 1;
+                    end if;
+                when Etat_Check_victoire =>
+                    position <= "000";
+                    
+                when others =>
+            end case;    
+    end process update_pos;
         
     white_grille : process( H, RST )
         variable cpt_l : integer range 0 to 7;
