@@ -253,11 +253,15 @@ begin
         end process cal_nx_state;
         
         
-    cal_output : process(clk)
+    cal_output : process(clk,reset)
      variable Vcpt_c: integer range 0 to 6;
      variable Vcpt_l: integer range 1 to 6;
         begin
-         if ( clk' event and clk='1') then
+         if(reset='1')then
+           Vcpt_c:=0;
+           Vcpt_l:=1;
+           
+         elsif ( clk' event and clk='1') then
             if(ce = '1') then
             case pr_state is
                 when INIT_STATE_ON =>
@@ -266,15 +270,6 @@ begin
                 when INIT_STATE_OFF =>
                   Vcpt_c:=0;
                   Vcpt_l:=1;
-                  out_victoire<="00";
-                  out_piece4_LC<= "0000000000000000";
-                  out_piece3_LC<= "0000000000000000";
-                  out_piece2_LC<= "0000000000000000";
-                  out_piece1_LC<= "0000000000000000";
-                  out_piece4_LC<= "0000000000000000";
-                  out_piece3_LC<= "0000000000000000";
-                  out_piece2_LC<= "0000000000000000";
-                  out_piece1_LC<= "0000000000000000"; 
                 when CHECK_LIGNE =>
                     
                         if(Vcpt_l = 6 and Vcpt_c=6)then
@@ -289,16 +284,7 @@ begin
                                   Vcpt_c := Vcpt_c + 1;
                              end if;
                             
-                        end if;   
-                        out_victoire<="00";
-                        out_piece4_LC<= "0000000000000000";
-                        out_piece3_LC<= "0000000000000000";
-                        out_piece2_LC<= "0000000000000000";
-                        out_piece1_LC<= "0000000000000000";
-                        out_piece4_LC<= "0000000000000000";
-                        out_piece3_LC<= "0000000000000000";
-                        out_piece2_LC<= "0000000000000000";
-                        out_piece1_LC<= "0000000000000000";                         
+                        end if;                  
                  
                 when CHECK_COLONNE =>
                       if(Vcpt_l = 6 and Vcpt_c=6)then
@@ -311,16 +297,7 @@ begin
                          else
                               Vcpt_l := Vcpt_l + 1;
                          end if;
-                      end if;
-                      out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                       
+                      end if;             
                 when CHECK_DIAGONALE_G1=>
                       if(Vcpt_c = 3 and Vcpt_l=6)then
                         Vcpt_c:=0;
@@ -329,15 +306,7 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                       end if;
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";        
+           
                 when CHECK_DIAGONALE_G2=>
                      if(Vcpt_c = 4 and Vcpt_l=6)then
                         Vcpt_c:=0;
@@ -346,15 +315,7 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                      
+                                  
                 when CHECK_DIAGONALE_G3=>
                      if(Vcpt_c = 5 and Vcpt_l=6)then
                         Vcpt_c:=1;
@@ -363,15 +324,7 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;  
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                         
+                                  
                 when CHECK_DIAGONALE_G4=>
                      if(Vcpt_c = 6 and Vcpt_l=6)then
                         Vcpt_c:=2;
@@ -380,15 +333,7 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                                                
+                                                          
                 when CHECK_DIAGONALE_G5=>
                      if(Vcpt_c = 6 and Vcpt_l=5)then
                         Vcpt_c:=3;
@@ -397,15 +342,8 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                      
+                   
+                                  
                 when CHECK_DIAGONALE_G6=>
                      if(Vcpt_c = 6 and Vcpt_l=4)then
                         Vcpt_c:=6;
@@ -414,15 +352,7 @@ begin
                         Vcpt_c := Vcpt_c + 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;  
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                                         
+                                               
                 when CHECK_DIAGONALE_D1=>
                      if(Vcpt_c = 3 and Vcpt_l=6)then
                         Vcpt_c:=6;
@@ -431,15 +361,7 @@ begin
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;  
-                     out_victoire<="00"; 
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                                         
+                                                      
                  when CHECK_DIAGONALE_D2=>
                      if(Vcpt_c = 2 and Vcpt_l=6)then
                         Vcpt_c:=6;
@@ -448,15 +370,7 @@ begin
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if;
-                     out_victoire<="00"; 
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                                     
+                                                
                 when CHECK_DIAGONALE_D3=>
                      if(Vcpt_c = 1 and Vcpt_l=6)then
                         Vcpt_c:=5;
@@ -465,15 +379,7 @@ begin
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                      
+                                  
                 when CHECK_DIAGONALE_D4=>
                      if(Vcpt_c = 0 and Vcpt_l=6)then
                         Vcpt_c:=4;
@@ -482,15 +388,7 @@ begin
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";                      
+                                
                 when CHECK_DIAGONALE_D5=>
                      if(Vcpt_c = 0 and Vcpt_l=5)then
                         Vcpt_c:=3;
@@ -499,15 +397,7 @@ begin
                         Vcpt_c := Vcpt_c - 1;
                         Vcpt_l := Vcpt_l + 1;
                      end if; 
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000"; 
+                   
                 when CHECK_DIAGONALE_D6=>
                      if(Vcpt_c = 0 and Vcpt_l=4)then
                           Vcpt_c:=0;
@@ -516,97 +406,119 @@ begin
                           Vcpt_c := Vcpt_c - 1;
                           Vcpt_l := Vcpt_l + 1;
                      end if; 
-                     out_victoire<="00";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";
-                     out_piece4_LC<= "0000000000000000";
-                     out_piece3_LC<= "0000000000000000";
-                     out_piece2_LC<= "0000000000000000";
-                     out_piece1_LC<= "0000000000000000";  
+                   
                 when FIN=> 
                         Vcpt_c:=0;
-                        Vcpt_l:=1;
-                        out_victoire<="00";
-                        out_piece4_LC<= "0000000000000000";
-                        out_piece3_LC<= "0000000000000000";
-                        out_piece2_LC<= "0000000000000000";
-                        out_piece1_LC<= "0000000000000000";
-                        out_piece4_LC<= "0000000000000000";
-                        out_piece3_LC<= "0000000000000000";
-                        out_piece2_LC<= "0000000000000000";
-                        out_piece1_LC<= "0000000000000000";  
+                        Vcpt_l:=1;            
                 when SEND=> 
+                     Vcpt_c:=0;
+                     Vcpt_l:=1;   
                     
-                     if(cpt_piece4_jaune ="100") then--4
-                            out_victoire<="10";
-                     
-                     elsif(cpt_piece4_rouge ="100")then --4
-                            out_victoire<="01";
-                     else
-                            out_victoire<="11";
-                     end if;
-                    Vcpt_c:=0;
-                    Vcpt_l:=1;
-                    out_piece4_LC<=buf_out_piece4_LC;
-                    out_piece3_LC<=buf_out_piece3_LC;
-                    out_piece2_LC<=buf_out_piece2_LC;
-                    out_piece1_LC<=buf_out_piece1_LC;
-                     out_piece4_LC<=buf_out_piece4_LC;
-                    out_piece3_LC<=buf_out_piece3_LC;
-                    out_piece2_LC<=buf_out_piece2_LC;
-                    out_piece1_LC<=buf_out_piece1_LC;                           
-                    
-               
             end case;
             cpt_c<= std_logic_vector(to_unsigned(Vcpt_c, 8));
             cpt_l<= std_logic_vector(to_unsigned(Vcpt_l, 8));
             cpt_c_1<= cpt_c;
             cpt_l_1<= cpt_l;
-            buf_out_piece4_LC(15 downto 8) <=cpt_l_1;
-            buf_out_piece3_LC(15 downto 8) <=buf_out_piece4_LC(15 downto 8);
-            buf_out_piece2_LC(15 downto 8) <=buf_out_piece3_LC(15 downto 8);
-            buf_out_piece1_LC(15 downto 8) <=buf_out_piece2_LC(15 downto 8);
-            buf_out_piece4_LC(7 downto 0) <=cpt_c_1;
-            buf_out_piece3_LC(7 downto 0) <=buf_out_piece4_LC(7 downto 0);
-            buf_out_piece2_LC(7 downto 0) <=buf_out_piece3_LC(7 downto 0);
-            buf_out_piece1_LC(7 downto 0) <=buf_out_piece2_LC(7 downto 0);
+
          
-           end if;
-           end if;
-        end process cal_output;
+         end if;
+      end if;
+    end process cal_output;
     
-    cal_piece : process(in_data,pr_state,cpt_c_1,cpt_l_1)
+    
+    cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge)
+    begin
+          
+            if(pr_state =INIT_STATE_OFF)then
+            
+                 out_piece1_LC<="0000000000000000";
+                 out_piece2_LC<="0000000000000000";
+                 out_piece3_LC<="0000000000000000";
+                 out_piece4_LC<="0000000000000000";
+                 buf_out_piece1_LC<="0000000000000000";
+                 buf_out_piece2_LC<="0000000000000000";
+                 buf_out_piece3_LC<="0000000000000000";
+                 buf_out_piece4_LC<="0000000000000000";
+                 
+            elsif( cpt_piece4_rouge ="100" or cpt_piece4_jaune ="100")then
+                   out_piece4_LC<=buf_out_piece4_LC;
+                   out_piece3_LC<=buf_out_piece3_LC;
+                   out_piece2_LC<=buf_out_piece2_LC;
+                   out_piece1_LC<=buf_out_piece1_LC;
+            else
+                   buf_out_piece4_LC(15 downto 8) <=cpt_l_1;
+                   buf_out_piece3_LC(15 downto 8) <=buf_out_piece4_LC(15 downto 8);
+                   buf_out_piece2_LC(15 downto 8) <=buf_out_piece3_LC(15 downto 8);
+                   buf_out_piece1_LC(15 downto 8) <=buf_out_piece2_LC(15 downto 8);
+                
+                   buf_out_piece4_LC(7 downto 0) <=cpt_c_1;
+                   buf_out_piece3_LC(7 downto 0) <=buf_out_piece4_LC(7 downto 0);
+                   buf_out_piece2_LC(7 downto 0) <=buf_out_piece3_LC(7 downto 0);
+                   buf_out_piece1_LC(7 downto 0) <=buf_out_piece2_LC(7 downto 0);
+            end if;                   
+    end process cal_victoire;
+    
+    cal_piece_victoire : process(pr_state)
+    begin
+          
+            if( pr_state =INIT_STATE_OFF )then
+                 out_victoire<="00";
+            elsif(pr_state =SEND)then
+                    
+                     if(cpt_piece4_jaune >="100") then--4
+                            out_victoire<="10";
+                     elsif(cpt_piece4_rouge >="100")then --4
+                            out_victoire<="01"; 
+                     else
+                            out_victoire<="11";
+                     end if;
+            end if;                   
+    end process cal_piece_victoire;
+    
+    
+    
+    cal_nb_piece : process(clk,reset)
     variable cpt_piece_jaune: integer range 0 to 4;
     variable cpt_piece_rouge: integer range 0 to 4;
         begin
+                 if ( reset ='1') then
+                   cpt_piece_jaune := 0;
+                   cpt_piece_rouge := 0;
+                 elsif ( clk' event and clk='1') then
+                  if(ce = '1') then
+                         if( pr_state /=INIT_STATE_ON and pr_state /=INIT_STATE_OFF and pr_state /=SEND)then
+                                if(cpt_piece_jaune<4) then
+                                   if( in_data="110")then --jaune
+                                     
+                                        cpt_piece_jaune:=cpt_piece_jaune+ 1;
+                                   else
+                                      
+                                        if(cpt_piece_jaune<4)then
+                                            cpt_piece_jaune:=0;
+                                        end if;
+                                      
+                                   end if;
+                                end if;
+                                if(cpt_piece_rouge<4) then
+                                   if( in_data="010")then --rouge
+                                        cpt_piece_rouge:=cpt_piece_rouge+1;
+                                   else
+                                        if(cpt_piece_rouge<4)then
+                                            cpt_piece_rouge:=0;
+                                        end if;
+                                   end if;
+                                end if;
+                           
+                         end if; 
+                             cpt_piece4_jaune<= std_logic_vector(to_unsigned(cpt_piece_jaune, 3));
+                             cpt_piece4_rouge<= std_logic_vector(to_unsigned(cpt_piece_rouge, 3));
+                    end if;
+                 end if;
             
-                     if( pr_state /=INIT_STATE_ON and pr_state /=INIT_STATE_OFF and pr_state /=SEND)then
-                            if(cpt_piece_jaune<4) then
-                               if( in_data="110")then --jaune
-                                 
-                                    cpt_piece_jaune:=cpt_piece_jaune+ 1;
-                               else
-                                  
-                                    cpt_piece_jaune:=0;
-                                  
-                               end if;
-                            end if;
-                            if(cpt_piece_rouge<4) then
-                               if( in_data="010")then --rouge
-                                    cpt_piece_rouge:=cpt_piece_rouge+1;
-                               else
-                                   if(cpt_piece_rouge<4)then
-                                        cpt_piece_rouge:=0;
-                                    end if;
-                               end if;
-                           end if;
-                
-                       cpt_piece4_jaune<= std_logic_vector(to_unsigned(cpt_piece_jaune, 3));
-                       cpt_piece4_rouge<= std_logic_vector(to_unsigned(cpt_piece_rouge, 3));
-                     end if; 
-    end process cal_piece;
+            
+            
+                     
+    end process cal_nb_piece;
      
       addr_grille_c_out <= cpt_c(2 downto 0);
       addr_grille_l_out <= cpt_l(2 downto 0); 

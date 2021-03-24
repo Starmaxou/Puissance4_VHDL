@@ -60,7 +60,6 @@ architecture Behavioral of top_victoire is
     signal En_affichage: std_logic;
     signal init_cpt: std_logic;
     signal en_cpt: std_logic;
-    signal victoire: std_logic_vector(1 downto 0);
     signal en_verif: std_logic;
     signal init_verif: std_logic;
     signal sel_ADDR: std_logic;
@@ -160,10 +159,10 @@ begin
            out_piece2_LC =>out_piece2_LC,
            out_piece3_LC =>out_piece3_LC,
            out_piece4_LC =>out_piece4_LC,
-           out_victoire=>victoire
+           out_victoire=>LED
           
           
          );
           signot_reset<=not(reset);
-          LED<=victoire;
+
     end Behavioral;
