@@ -24,8 +24,7 @@ architecture tb of tb_FSM is
               E_write_type_piece : out std_logic_vector (2 downto 0);
               F_RW_plateau       : out std_logic;
               G_en_verif         : out std_logic;
-              H_init_verif       : out std_logic;
-              I_sel_LC           : out std_logic);
+              H_sel_LC           : out std_logic);
     end component;
 
     signal CE                 : std_logic;
@@ -41,8 +40,7 @@ architecture tb of tb_FSM is
     signal E_write_type_piece : std_logic_vector (2 downto 0);
     signal F_RW_plateau       : std_logic;
     signal G_en_verif         : std_logic;
-    signal H_init_verif       : std_logic;
-    signal I_sel_LC           : std_logic;
+    signal H_sel_LC           : std_logic;
 
     constant TbPeriod : time := 1000 ns; -- EDIT Put right period here
     signal TbClock : std_logic := '0';
@@ -64,8 +62,7 @@ begin
               E_write_type_piece => E_write_type_piece,
               F_RW_plateau       => F_RW_plateau,
               G_en_verif         => G_en_verif,
-              H_init_verif       => H_init_verif,
-              I_sel_LC           => I_sel_LC);
+              H_sel_LC           => H_sel_LC);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
