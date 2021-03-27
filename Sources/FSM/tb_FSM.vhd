@@ -90,6 +90,7 @@ begin
         -- EDIT Add stimuli here
         wait for 100 * TbPeriod;
         
+        -- Déplacement de 2 vers la droite
         btnR <= '1';
         wait for 2 * TbPeriod;
         btnR <= '0';
@@ -101,6 +102,7 @@ begin
         
         wait for 50 * TbPeriod;
         
+        -- Déplacement de 3 vers la gauche
         btnL <= '1';
         wait for 2 * TbPeriod;
         btnL <= '0';
@@ -117,6 +119,7 @@ begin
         
         wait for 100 * TbPeriod;
         
+        -- Validation de la position du jeton
         btnC <= '1';
         wait for 2 * TbPeriod;
         btnC <= '0';
@@ -124,6 +127,7 @@ begin
         
         wait for 20 * TbPeriod;
         
+        -- Simulation d'un resultat nul par le bloc check victoire
         B_state_victoire <= "11";
         wait for 2 * TbPeriod;
         B_state_victoire <= "00";
@@ -131,6 +135,7 @@ begin
         
         wait for 100 * TbPeriod;
         
+        -- Validation de la position du jeton
         btnC <= '1';
         wait for 2 * TbPeriod;
         btnC <= '0';
@@ -138,6 +143,7 @@ begin
         
         wait for 20 * TbPeriod;
         
+        -- Simulation de victoire du joueur jaune
         B_state_victoire <= "10";
         wait for 2 * TbPeriod;
         B_state_victoire <= "00";
@@ -145,6 +151,7 @@ begin
         
         wait for 50 * TbPeriod;
         
+        -- Relance d'une partie après victoire
         btnC <= '1';
         wait for 2 * TbPeriod;
         btnC <= '0';
