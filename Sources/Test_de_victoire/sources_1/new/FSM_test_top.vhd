@@ -84,8 +84,12 @@ begin
                  when Etat_init_Verif=>
                             nx_state <= Etat_Verif;
                  when Etat_Verif=>
-                            
-                                nx_state <= Etat_Verif;
+                                --if(res_victoire="00")then
+                                  nx_state <= Etat_Verif;
+                                --else
+                                -- nx_state <= Etat_Affichage;
+                                --end if;
+                              
                     
                   
  
