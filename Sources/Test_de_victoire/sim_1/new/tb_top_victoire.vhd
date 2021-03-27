@@ -1,6 +1,6 @@
 -- Testbench automatically generated online
 -- at https://vhdl.lapinoo.net
--- Generation date : 16.3.2021 18:41:50 UTC
+-- Generation date : 24.3.2021 12:33:06 UTC
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -14,6 +14,7 @@ architecture tb of tb_top_victoire is
         port (reset   : in std_logic;
               clk100M : in std_logic;
               BTNC    : in std_logic;
+              BTNU    : in std_logic;
               VGA_R   : out std_logic_vector (3 downto 0);
               VGA_B   : out std_logic_vector (3 downto 0);
               VGA_G   : out std_logic_vector (3 downto 0);
@@ -25,6 +26,7 @@ architecture tb of tb_top_victoire is
     signal reset   : std_logic;
     signal clk100M : std_logic;
     signal BTNC    : std_logic;
+    signal BTNU    : std_logic;
     signal VGA_R   : std_logic_vector (3 downto 0);
     signal VGA_B   : std_logic_vector (3 downto 0);
     signal VGA_G   : std_logic_vector (3 downto 0);
@@ -42,6 +44,7 @@ begin
     port map (reset   => reset,
               clk100M => clk100M,
               BTNC    => BTNC,
+              BTNU    => BTNU,
               VGA_R   => VGA_R,
               VGA_B   => VGA_B,
               VGA_G   => VGA_G,
@@ -59,6 +62,7 @@ begin
     begin
         -- EDIT Adapt initialization as needed
         BTNC <= '0';
+        BTNU <= '0';
 
         -- Reset generation
         -- EDIT: Check that reset is really your reset signal
@@ -66,15 +70,17 @@ begin
         wait for 100 ns;
         reset <= '1';
         wait for 100 ns;
-        BTNC<='1';
-        wait for 5 ns;
-        BTNC<='0';
-        -- EDIT Add stimuli here
+        BTNC <= '1';
+        wait for 5 * TbPeriod;
+        BTNC <= '0';
+        wait for 7000 * TbPeriod;
+        BTNU <= '1';
+        wait for 5 * TbPeriod;
+        BTNU <= '0';
         wait for 10000000 * TbPeriod;
-
-        -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
         wait;
     end process;
 
 end tb;
+

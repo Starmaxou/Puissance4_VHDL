@@ -71,8 +71,8 @@ signal flag: std_logic :='0';
                       out_BD<=x"551A";
                 elsif(Bp1 ='0' and Bp2 ='0'and Bp3 ='0'and Bp4 ='0' and Bp5 ='1')then
                      out_num_figure<="000";
-                     out_HG<=x"0000";
-                     out_BD<=x"9F63";
+                     out_HG<=x"4C11";                
+                     out_BD<=x"551A";
                 end if;
                 
             

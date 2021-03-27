@@ -35,6 +35,7 @@ entity top_victoire is
         port( reset : in std_logic ;
           clk100M : in std_logic;
           BTNC: in std_logic;
+          BTNU: in std_logic;
           VGA_R: out std_logic_vector(3 downto 0);
           VGA_B: out std_logic_vector(3 downto 0);
           VGA_G: out std_logic_vector(3 downto 0);
@@ -56,23 +57,38 @@ architecture Behavioral of top_victoire is
     signal verif_addr_C: std_logic_vector(2 downto 0);
     signal signot_Reset: std_logic;
     signal W_ready: std_logic;
-    signal Check_victoire: std_logic;
+    signal victoire: std_logic_vector(1 downto 0);
     signal En_affichage: std_logic;
-    signal init_cpt: std_logic;
     signal en_cpt: std_logic;
-    signal en_verif: std_logic;
-    signal init_verif: std_logic;
+    signal en_FDM_aff: std_logic;
     signal sel_ADDR: std_logic;
-    signal  out_piece1_LC: std_logic_vector(15 downto 0);
-    signal  out_piece2_LC: std_logic_vector(15 downto 0);
-    signal  out_piece3_LC: std_logic_vector(15 downto 0);
-    signal  out_piece4_LC: std_logic_vector(15 downto 0);
+    signal init_verif: std_logic;
+    signal R_W_grille: std_logic;
+    signal out_piece_verte: std_logic_vector(2 downto 0);
+    
 begin
+
+        
+        
+         FSM_top: entity  work.FSM_test_top
+         port map (
+           CE =>'1',
+           H =>clk100M,
+           RST  => signot_reset,
+           res_victoire=>victoire,
+           BP_affiche =>BTNC,
+           BP_victoire =>BTNU,
+           init_verif => init_verif,
+           en_affichage =>en_FDM_aff,
+           SEL_ADDR =>sel_ADDR
+          
+            );
+
         mux_L: entity  work.mux_L_C
         port map (
                 sel_mux =>sel_ADDR,
                 in_data0 => compteur_addr_L,
-                in_data1 =>verif_addr_L,
+                in_data1 => verif_addr_L,
                 out_data =>out_addr_L
         );
         mux_C: entity  work.mux_L_C
@@ -82,20 +98,16 @@ begin
                 in_data1 =>verif_addr_C,
                 out_data =>out_addr_C
         );
-     FSM: entity  work.mini_FSM_victoire
+        
+     FSM_affichage: entity  work.mini_FSM_victoire
          port map (
            CE =>'1',
            H =>clk100M,
            RST  => signot_reset,
            W_ready=>W_ready,
-           BP=>BTNC,
-           in_check_victoire =>Check_victoire,
+           en_FSM=>en_FDM_aff,
            out_en_affichage=>En_affichage,
-           out_init_cpt=>init_cpt,
-           out_en_cpt=>en_cpt,
-           out_en_verif=> en_verif,
-           out_init_verif=>init_verif,
-           sel_ADDR=>sel_ADDR
+           out_en_cpt=>en_cpt
             );
     affichage: entity  work.top_affichage
          port map (
@@ -130,7 +142,7 @@ begin
            R_W =>'0',
            addr_grille_c =>out_addr_C,
            addr_grille_l =>out_addr_L,
-           out_data  => type_piece
+           type_piece  => type_piece
          );
    compteur_test_victoire:   entity work.compteur_test_victoire
      port map (
@@ -138,11 +150,9 @@ begin
                H =>clk100M,
                RST =>signot_reset,
                en_cpt => en_cpt,
-               init_cpt =>init_cpt,
+               init_cpt =>'0',
                addr_grille_c_out=>compteur_addr_C,
-               addr_grille_l_out=>compteur_addr_L,
-               out_check_victoire=> Check_victoire
-               
+               addr_grille_l_out=>compteur_addr_L    
                );
   
   verification_victoire: entity    work.verification_victoire
@@ -150,19 +160,15 @@ begin
            clk =>clk100M,
            ce=>'1',
            reset=> signot_reset,
-           en_verif=> en_verif,
            init_state => init_verif,
            in_data =>type_piece,
            addr_grille_c_out =>verif_addr_C,
            addr_grille_l_out =>verif_addr_L,
-           out_piece1_LC =>out_piece1_LC,
-           out_piece2_LC =>out_piece2_LC,
-           out_piece3_LC =>out_piece3_LC,
-           out_piece4_LC =>out_piece4_LC,
-           out_victoire=>LED
-          
+           R_W=> R_W_grille,
+           out_victoire=>victoire,
+           out_piece_verte=>out_piece_verte
           
          );
           signot_reset<=not(reset);
-
+          LED<=victoire;
     end Behavioral;
