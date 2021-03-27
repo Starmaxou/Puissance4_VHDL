@@ -105,6 +105,7 @@ begin
         begin
             case pr_state is
                 when Etat_Init =>
+                	nx_player <= Joueur_Rouge;
                     nx_state <= Etat_Init_grille;
                     
                 when Etat_Init_grille =>
@@ -370,26 +371,34 @@ begin
                 colonne_grille <= "000";
                 init_grille <= '0';
             elsif ( H'event and H = '1') then
-                if (pr_state = Etat_Init_grille) then
-                    if (cpt_l = 6 and cpt_c = 6) then
-                         init_grille <= '1';
-                    else
-                        if (cpt_c = 6) then
-                            cpt_c := 0;
-                            cpt_l := cpt_l + 1;
-                        end if;
-                        cpt_c := cpt_c + 1;
-                            
-                        init_grille <= '0';      
-                        if (cpt_l = 0) then
-                             type_piece_grille <= "000";
-                        else
-                             type_piece_grille <= "100";
-                        end if;   
-                        ligne_grille <= std_logic_vector(to_unsigned(cpt_l, 3));
-                        colonne_grille <= std_logic_vector(to_unsigned(cpt_c, 3));
-                    end if;
-                end if;
+                case pr_state is
+                	when Etat_Init_grille => 
+						if (cpt_l = 6 and cpt_c = 6) then
+							 init_grille <= '1';
+						else
+							if (cpt_c = 6) then
+								cpt_c := 0;
+								cpt_l := cpt_l + 1;
+							end if;
+							cpt_c := cpt_c + 1;
+								
+							init_grille <= '0';      
+							if (cpt_l = 0) then
+								 type_piece_grille <= "000";
+							else
+								 type_piece_grille <= "100";
+							end if;   
+							ligne_grille <= std_logic_vector(to_unsigned(cpt_l, 3));
+							colonne_grille <= std_logic_vector(to_unsigned(cpt_c, 3));
+						end if;
+					when others => 
+						init_grille <= '0';
+						cpt_l := 0;
+						cpt_c := 0;
+						type_piece_grille <= "000";
+                		ligne_grille <= "000";
+                		colonne_grille <= "000";					
+                end case;
             end if;
     end process white_grille;
 
