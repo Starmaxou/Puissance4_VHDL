@@ -52,7 +52,7 @@ end FSM;
 
 architecture Behavioral of FSM is
 
-    type Etat is ( Etat_init, Etat_Init_grille, Etat_Affichage_jeu, Etat_Effacer_pos, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
+    type Etat is ( Etat_init, Etat_Init_grille, Etat_Affichage_jeu, Etat_Effacer_pos, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
@@ -170,6 +170,7 @@ begin
                                 when Joueur_Jaune =>
                                     nx_player <= Joueur_Rouge;
                             end case;
+                            nx_state <= Etat_Affichage_jeu;
                         when "10" =>    -- Yellow win
                             nx_state <= Etat_Victoire;
                         when "01" =>    -- Red win
@@ -177,8 +178,6 @@ begin
                         when others =>    -- Check_victoire ongoing
                             nx_state <= Etat_Check_victoire;
                     end case;
-                    nx_state <= Etat_Affichage_jeu;
-                    
                                 
                 when Etat_Victoire =>
                     if( btnC = '1' ) then
@@ -221,7 +220,7 @@ begin
                     
                 when Etat_Effacer_pos =>
                     C_ligne_grille      <= "000";
-                    D_colonne_grille    <= "000";   
+                    D_colonne_grille    <= std_logic_vector(position);   
                     E_write_type_piece  <= "000";
                     F_RW_plateau        <= '1';
                     G_en_verif          <= '0';
@@ -253,7 +252,16 @@ begin
                     F_RW_plateau         <= '0';
                     G_en_verif           <= '0';
                     H_sel_LC            <= '0';
-                when Etat_Ecriture_mouv =>
+                    
+				when Etat_Effacer_mouv =>
+                    C_ligne_grille       <= ligne_check_mouv;
+                    D_colonne_grille     <= colonne_check_mouv;
+                    E_write_type_piece   <= "000";
+                    F_RW_plateau         <= '1';
+                    G_en_verif           <= '0';
+                    H_sel_LC             <= '0';
+
+				when Etat_Ecriture_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
                     D_colonne_grille     <= colonne_check_mouv;
                     if (pr_player = Joueur_Rouge) then
@@ -263,8 +271,8 @@ begin
                     end if;
                     F_RW_plateau         <= '1';
                     G_en_verif           <= '0';
-                    H_sel_LC             <= '0';
-                
+                    H_sel_LC             <= '0';                                    
+								
                 when Etat_Check_victoire =>
                     C_ligne_grille       <= "000";
                     D_colonne_grille     <= "000";
@@ -309,6 +317,12 @@ begin
                         end if;
                         ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
                         colonne_check_mouv <= std_logic_vector(position);
+                        
+					when Etat_Effacer_pos =>
+						mouv_state <= "11";
+                        ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
+                        colonne_check_mouv <= std_logic_vector(position);
+                        					
                     when Etat_Ecriture_mouv =>
                         ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
                         colonne_check_mouv <= std_logic_vector(position);

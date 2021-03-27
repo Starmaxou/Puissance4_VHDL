@@ -122,7 +122,35 @@ begin
         btnC <= '0';
         wait for 2 * TbPeriod;
         
+        wait for 20 * TbPeriod;
+        
+        B_state_victoire <= "11";
+        wait for 2 * TbPeriod;
+        B_state_victoire <= "00";
+        wait for 2 * TbPeriod;
+        
         wait for 100 * TbPeriod;
+        
+        btnC <= '1';
+        wait for 2 * TbPeriod;
+        btnC <= '0';
+        wait for 2 * TbPeriod;
+        
+        wait for 20 * TbPeriod;
+        
+        B_state_victoire <= "10";
+        wait for 2 * TbPeriod;
+        B_state_victoire <= "00";
+        wait for 2 * TbPeriod;
+        
+        wait for 50 * TbPeriod;
+        
+        btnC <= '1';
+        wait for 2 * TbPeriod;
+        btnC <= '0';
+        wait for 2 * TbPeriod;
+        
+        wait for 50 * TbPeriod;
         
         -- Stop the clock and hence terminate the simulation
         TbSimEnded <= '1';
