@@ -65,7 +65,7 @@ architecture Behavioral of FSM is
 	signal init_grille :   std_logic;                          -- flag to check if initialization ok 
 	signal ligne_grille :  std_logic_vector (2 downto 0);      -- signal for initialization
 	signal colonne_grille : std_logic_vector (2 downto 0);     -- signal for initialization
-	signal type_piece_grille : std_logic_vector (2 downto 0);  -- signal for initialization
+
 	
 	-- check_mouv process
 	signal mouv_state : std_logic_vector (1 downto 0); -- Result of check_mouv
@@ -116,15 +116,15 @@ begin
                     end if;
                     
                 when Etat_Affichage_jeu =>
-                    if( btnC = '1' ) then
-                        nx_state <= Etat_check_mouv;
-                    elsif( btnL = '1' ) then
-                        btn_mem <= '0';
-                        nx_state <= Etat_Effacer_pos;
-                    elsif( btnR = '1' ) then
-                        btn_mem <= '1';
-                        nx_state <= Etat_Effacer_pos;
-                    end if;
+--                    if( btnC = '1' ) then
+--                        nx_state <= Etat_check_mouv;
+--                    elsif( btnL = '1' ) then
+--                        btn_mem <= '0';
+--                        nx_state <= Etat_Effacer_pos;
+--                    elsif( btnR = '1' ) then
+--                        btn_mem <= '1';
+--                        nx_state <= Etat_Effacer_pos;
+--                    end if;
                 
                 when Etat_Effacer_pos =>
                     -- Ajouter vérification d'écriture de la case blanche
@@ -193,7 +193,7 @@ begin
 ------
 -- Mise à jours des sorties en fonction de l'état courant
 ------    
-    cal_output : process( pr_state, ligne_grille, colonne_grille, type_piece_grille, ligne_check_mouv, colonne_check_mouv )
+    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv, colonne_check_mouv )
         begin
             case pr_state is
                 when Etat_Init =>
@@ -205,9 +205,13 @@ begin
                     H_sel_LC            <= '0';
                 when Etat_Init_grille =>
                     C_ligne_grille      <= ligne_grille;
-                    D_colonne_grille    <= colonne_grille;   
-                    E_write_type_piece  <= type_piece_grille;
-                    F_RW_plateau        <= '0';
+                    D_colonne_grille    <= colonne_grille; 
+                    if (ligne_grille = "000") then
+						E_write_type_piece <= "100";
+				    else
+						E_write_type_piece <= "000";
+					end if;    
+                    F_RW_plateau        <= '1'; 
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     
@@ -245,6 +249,19 @@ begin
                     H_sel_LC            <= '0';
                                          
                 when Etat_Ecriture_pos =>
+                    C_ligne_grille      <= "000";
+                    D_colonne_grille    <= std_logic_vector(position);   
+                    if (pr_player = Joueur_Rouge) then
+                        E_write_type_piece   <= "001";
+                    else 
+                        E_write_type_piece   <= "101";
+                    end if;
+                    F_RW_plateau        <= '1';
+                    G_en_verif          <= '0';
+                    H_sel_LC            <= '0';
+                
+                
+                
                     
                 when Etat_Check_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
@@ -366,7 +383,6 @@ begin
             if ( RST = '1') then
                 cpt_l := 0;
                 cpt_c := 0;
-                type_piece_grille <= "000";
                 ligne_grille <= "000";
                 colonne_grille <= "000";
                 init_grille <= '0';
@@ -379,15 +395,12 @@ begin
 							if (cpt_c = 6) then
 								cpt_c := 0;
 								cpt_l := cpt_l + 1;
+						    else
+						        cpt_c := cpt_c + 1;
 							end if;
-							cpt_c := cpt_c + 1;
+							
 								
-							init_grille <= '0';      
-							if (cpt_l = 0) then
-								 type_piece_grille <= "000";
-							else
-								 type_piece_grille <= "100";
-							end if;   
+							init_grille <= '0';       
 							ligne_grille <= std_logic_vector(to_unsigned(cpt_l, 3));
 							colonne_grille <= std_logic_vector(to_unsigned(cpt_c, 3));
 						end if;
@@ -395,7 +408,6 @@ begin
 						init_grille <= '0';
 						cpt_l := 0;
 						cpt_c := 0;
-						type_piece_grille <= "000";
                 		ligne_grille <= "000";
                 		colonne_grille <= "000";					
                 end case;
