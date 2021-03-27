@@ -44,7 +44,7 @@ end mini_FSM_victoire ;
 
 architecture Behavioral of mini_FSM_victoire  is
 
-    type Etat is ( Etat_init, Etat_wait_W,Etat_aff_on,Etat_aff_off, Etat_wait_end_aff, Etat_cpt_en);
+    type Etat is ( Etat_init, Etat_wait_W,Etat_aff_on,Etat_aff_off, Etat_wait_end_aff,Etat_cpt_on,Etat_cpt_off,Wait_piece);
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 begin
@@ -69,14 +69,23 @@ begin
                                 else
                                       nx_state <=Etat_init;
                                 end if;
+
                     when Etat_wait_W =>
                                 if(W_ready='1')then
-                                      nx_state <=Etat_aff_on;
+                                      nx_state <=Etat_cpt_on;
                                 else
                                       nx_state <=Etat_wait_W;
                                 end if;
-                     when Etat_aff_on =>     
-                                      nx_state <=Etat_aff_off;
+                     when Etat_cpt_on =>     
+                                      nx_state <=Etat_cpt_off;
+                           
+                     when Etat_cpt_off =>     
+                                      nx_state <=Wait_piece;
+                           
+                     when Wait_piece =>        
+                            nx_state <=Etat_aff_on;
+                     when Etat_aff_on =>    
+                            nx_state <=Etat_aff_off;           
                      when Etat_aff_off =>    
                                 if(W_ready='0')then
                                       nx_state <=Etat_wait_end_aff;
@@ -85,12 +94,10 @@ begin
                                 end if; 
                       when Etat_wait_end_aff =>    
                                 if(W_ready='1')then
-                                      nx_state <=Etat_cpt_en;
+                                      nx_state <=Etat_init;
                                 else
                                       nx_state <=Etat_wait_end_aff;
-                                end if;
-                      when Etat_cpt_en => 
-                                   nx_state <=Etat_init;                    
+                                end if;      
                    end case;
         end process cal_nx_state;
     
@@ -104,7 +111,19 @@ begin
                 when Etat_wait_W =>
                     out_en_affichage<='0';
                     out_en_cpt<='0';
-                                                   
+                    
+                    
+                when Etat_cpt_on =>
+                    out_en_affichage<='0';
+                    out_en_cpt<='1';
+             
+                  
+                when Etat_cpt_off =>  
+                    out_en_affichage<='0';
+                    out_en_cpt<='0';
+                when Wait_piece => 
+                    out_en_affichage<='0';
+                    out_en_cpt<='0';                     
                 when Etat_aff_on =>
                     out_en_affichage<='1';
                     out_en_cpt<='0';
@@ -120,11 +139,7 @@ begin
                     out_en_cpt<='0';
                   
                                                            
-                when Etat_cpt_en =>
-                    out_en_affichage<='0';
-                    out_en_cpt<='1';
-                   
-            
+                
                    
                  
                                                     

@@ -70,30 +70,30 @@ begin
 
         
         
-         FSM_top: entity  work.FSM_test_top
-         port map (
-           CE =>'1',
-           H =>clk100M,
-           RST  => signot_reset,
-           res_victoire=>victoire,
-           BP_affiche =>BTNC,
-           BP_victoire =>BTNU,
-           init_verif => init_verif,
-           en_affichage =>en_FDM_aff,
-           SEL_ADDR =>sel_ADDR
+--         FSM_top: entity  work.FSM_test_top
+--         port map (
+--           CE =>'1',
+--           H =>clk100M,
+--           RST  => signot_reset,
+--           res_victoire=>victoire,
+--           BP_affiche =>BTNC,
+--           BP_victoire =>BTNU,
+--           init_verif => init_verif,
+--           en_affichage =>en_FDM_aff,
+--           SEL_ADDR =>sel_ADDR
           
-            );
+--            );
 
         mux_L: entity  work.mux_L_C
         port map (
-                sel_mux =>sel_ADDR,
+                sel_mux =>'0',
                 in_data0 => compteur_addr_L,
                 in_data1 => verif_addr_L,
                 out_data =>out_addr_L
         );
         mux_C: entity  work.mux_L_C
         port map (
-                sel_mux =>sel_ADDR,
+                sel_mux =>'0',
                 in_data0 => compteur_addr_C,
                 in_data1 =>verif_addr_C,
                 out_data =>out_addr_C
@@ -105,7 +105,7 @@ begin
            H =>clk100M,
            RST  => signot_reset,
            W_ready=>W_ready,
-           en_FSM=>en_FDM_aff,
+           en_FSM=>'1',
            out_en_affichage=>En_affichage,
            out_en_cpt=>en_cpt
             );
@@ -160,7 +160,7 @@ begin
            clk =>clk100M,
            ce=>'1',
            reset=> signot_reset,
-           init_state => init_verif,
+           init_state => '0',
            in_data =>type_piece,
            addr_grille_c_out =>verif_addr_C,
            addr_grille_l_out =>verif_addr_L,
