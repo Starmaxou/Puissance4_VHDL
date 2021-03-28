@@ -119,9 +119,9 @@ begin
                     end if;
 
                 when Etat_Affichage_jeu =>
-                    if( btnC = '1' ) then
-                        nx_state <= Etat_check_mouv;
-                    elsif( btnL = '1' ) then
+--                    if( btnC = '1' ) then
+--                        nx_state <= Etat_check_mouv;
+                    if( btnL = '1' ) then
                         btn_mem <= '0';
                         nx_state <= ATT_W_ready;
                     elsif( btnR = '1' ) then
