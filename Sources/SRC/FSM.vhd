@@ -119,9 +119,9 @@ begin
                     end if;
 
                 when Etat_Affichage_jeu =>
---                    if( btnC = '1' ) then
---                        nx_state <= Etat_check_mouv;
-                    if( btnL = '1' ) then
+                    if( btnC = '1' ) then
+                        nx_state <= Etat_check_mouv;
+                    elsif( btnL = '1' ) then
                         btn_mem <= '0';
                         nx_state <= ATT_W_ready;
                     elsif( btnR = '1' ) then
@@ -130,6 +130,7 @@ begin
                     else
                         nx_state <= Etat_Affichage_jeu;
                     end if;
+                    
                 when ATT_W_ready =>
                         if(W_Ready='1')then
                              nx_state<=Etat_Effacer_pos;
@@ -214,6 +215,8 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000000000000001";
+                    
                 when Etat_Init_grille =>
                     C_ligne_grille      <= ligne_grille;
                     D_colonne_grille    <= colonne_grille; 
@@ -228,7 +231,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
-
+					J_Led_State <= "0000000000000010";
                 
                 when Etat_Affichage_jeu =>
                     C_ligne_grille      <= "000";
@@ -238,6 +241,8 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '1';
+                    J_Led_State <= "0000000000000100";
+                    
                  when ATT_W_ready =>    
                     C_ligne_grille      <= "000";
                     D_colonne_grille    <= "000";   
@@ -246,6 +251,8 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000000000001000";
+                    
                 when Etat_Effacer_pos =>
                     C_ligne_grille      <= "000";
                     D_colonne_grille    <= std_logic_vector(position);   
@@ -254,6 +261,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000000000010000";
                     
                 when Etat_Incrementer =>
                     C_ligne_grille       <= "000";
@@ -263,7 +271,7 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC             <= '0';
                     I_AFF_plateau       <= '0';
-                    
+                    J_Led_State <= "0000000000100000";
                                     
                 when Etat_Decrementer =>
                     C_ligne_grille       <= "000";
@@ -273,6 +281,7 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000000001000000";
                                          
                 when Etat_Ecriture_pos =>
                     C_ligne_grille      <= "000";
@@ -286,6 +295,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000000010000000";
                 
                 when Etat_Check_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
@@ -295,6 +305,7 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000000100000000";
                     
 				when Etat_Effacer_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
@@ -304,6 +315,7 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC             <= '0';
                     I_AFF_plateau       <= '0';
+                    J_Led_State <= "0000001000000000";
 
 				when Etat_Ecriture_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
@@ -317,7 +329,8 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC             <= '0'; 
                     I_AFF_plateau       <= '0';                                   
-								
+					J_Led_State <= "0000010000000000";			
+					
                 when Etat_Check_victoire =>
                     C_ligne_grille       <= "000";
                     D_colonne_grille     <= "000";
@@ -326,11 +339,13 @@ begin
                     G_en_verif           <= '1';
                     H_sel_LC            <= '1';
                     I_AFF_plateau       <= '0';
-                    
+                    J_Led_State <= "0000100000000000";
                 
                 when Etat_Victoire =>
-                
+                	J_Led_State <= "0001000000000000";
+                	
                 when others =>
+                	J_Led_State <= "0000000000000000";
                                                                                       
             end case;
         end process cal_output;
@@ -443,40 +458,5 @@ begin
                 end case;
             end if;
     end process white_grille;
-    
-    LED_State : process( pr_state )
-    begin
-    	case pr_state is
-    		when Etat_init =>
-    			J_Led_State <= "0000000000000001";
-    		when Etat_Init_grille =>
-    			J_Led_State <= "0000000000000010";
-    		when ATT_W_ready =>
-    			J_Led_State <= "0000000000000100";
-    		when Etat_Affichage_jeu =>
-    			J_Led_State <= "0000000000001000";
-    		when Etat_Effacer_pos =>
-    			J_Led_State <= "0000000000010000";
-    		when Etat_Incrementer =>
-    			J_Led_State <= "0000000000100000";
-    		when Etat_Decrementer =>
-    			J_Led_State <= "0000000001000000";
-    		when Etat_Ecriture_pos =>
-    			J_Led_State <= "0000000010000000";
-    		when Etat_Check_mouv =>
-    			J_Led_State <= "0000000100000000";
-    		when Etat_Effacer_mouv =>
-    			J_Led_State <= "0000001000000000";
-    		when Etat_Ecriture_mouv =>
-    			J_Led_State <= "0000010000000000";
-    		when Etat_Check_victoire =>
-    			J_Led_State <= "0000100000000000";
-    		when Etat_Victoire => 
-    			J_Led_State <= "0001000000000000";
-    		when others =>
-    			J_Led_State <= "1111111111111111";
-    	end case;
-    	
-    end process LED_State;
 
 end Behavioral;
