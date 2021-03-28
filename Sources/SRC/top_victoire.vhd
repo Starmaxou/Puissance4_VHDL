@@ -48,35 +48,35 @@ entity top_victoire is
 end top_victoire;
 
 architecture Behavioral of top_victoire is
-    signal HG: std_logic_vector(15 downto 0):=(others => '0');
-    signal BD: std_logic_vector(15 downto 0):=(others => '0');
-    signal type_piece: std_logic_vector(2 downto 0):=(others => '0');
-    signal out_addr_L: std_logic_vector(2 downto 0):=(others => '0');
-    signal out_addr_C: std_logic_vector(2 downto 0):=(others => '0');
-    signal compteur_addr_L: std_logic_vector(2 downto 0):=(others => '0');
-    signal compteur_addr_C: std_logic_vector(2 downto 0):=(others => '0');
-    signal verif_addr_L: std_logic_vector(2 downto 0):=(others => '0');
-    signal verif_addr_C: std_logic_vector(2 downto 0):=(others => '0');
-    signal addr_L_FSM: std_logic_vector(2 downto 0):=(others => '0');
-    signal addr_C_FSM: std_logic_vector(2 downto 0):=(others => '0');
-    signal signot_Reset: std_logic:='0';
-    signal W_ready: std_logic:='0';
-    signal victoire: std_logic_vector(1 downto 0):=(others => '0');
-    signal En_affichage: std_logic:='0';
-    signal en_cpt: std_logic:='0';
-    signal en_FDM_aff: std_logic:='0';
-    signal en_FDM_aff_Q: std_logic:='0';
-    signal init_verif: std_logic:='0';
-    signal write_type_piece: std_logic_vector(2 downto 0):=(others => '0');
-    signal piece1_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
-    signal piece2_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
-    signal piece3_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
-    signal piece4_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
-    signal F_RW_plateau: std_logic:='0';
-    signal H_sel_LC: std_logic:='0';
-    signal BTNL_Edge: std_logic:='0';
-    signal BTNC_Edge: std_logic:='0';
-    signal BTNR_Edge: std_logic:='0';
+    signal HG: std_logic_vector(15 downto 0);
+    signal BD: std_logic_vector(15 downto 0);
+    signal type_piece: std_logic_vector(2 downto 0);
+    signal out_addr_L: std_logic_vector(2 downto 0);
+    signal out_addr_C: std_logic_vector(2 downto 0);
+    signal compteur_addr_L: std_logic_vector(2 downto 0);
+    signal compteur_addr_C: std_logic_vector(2 downto 0);
+    signal verif_addr_L: std_logic_vector(2 downto 0);
+    signal verif_addr_C: std_logic_vector(2 downto 0);
+    signal addr_L_FSM: std_logic_vector(2 downto 0);
+    signal addr_C_FSM: std_logic_vector(2 downto 0);
+    signal signot_Reset: std_logic;
+    signal W_ready: std_logic;
+    signal victoire: std_logic_vector(1 downto 0);
+    signal En_affichage: std_logic;
+    signal en_cpt: std_logic;
+    signal en_FDM_aff: std_logic;
+    signal en_FDM_aff_Q: std_logic;
+    signal init_verif: std_logic;
+    signal write_type_piece: std_logic_vector(2 downto 0);
+    signal piece1_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal piece2_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal piece3_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal piece4_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal F_RW_plateau: std_logic;
+    signal H_sel_LC: std_logic;
+    signal BTNL_Edge: std_logic;
+    signal BTNC_Edge: std_logic;
+    signal BTNR_Edge: std_logic;
 begin
 
       Edge_BTNL  :entity work.Edge_detector
@@ -111,6 +111,7 @@ begin
            btnR=>BTNR_Edge,
            A_read_type_piece=>type_piece,
            B_state_victoire=>victoire,
+             W_Ready  =>W_Ready,
            
            C_ligne_grille =>addr_L_FSM,
            D_colonne_grille=>addr_C_FSM,
