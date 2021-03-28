@@ -65,25 +65,50 @@ architecture Behavioral of top_victoire is
     signal En_affichage: std_logic:='0';
     signal en_cpt: std_logic:='0';
     signal en_FDM_aff: std_logic:='0';
-    signal sel_ADDR: std_logic:='0';
+    signal en_FDM_aff_Q: std_logic:='0';
     signal init_verif: std_logic:='0';
     signal write_type_piece: std_logic_vector(2 downto 0):=(others => '0');
-    signal out_piece_verte: std_logic_vector(2 downto 0):=(others => '0');
     signal piece1_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
     signal piece2_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
     signal piece3_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
     signal piece4_LC : STD_LOGIC_VECTOR (15 downto 0):=(others => '0');
     signal F_RW_plateau: std_logic:='0';
     signal H_sel_LC: std_logic:='0';
+    signal BTNL_Edge: std_logic:='0';
+    signal BTNC_Edge: std_logic:='0';
+    signal BTNR_Edge: std_logic:='0';
 begin
 
+      Edge_BTNL  :entity work.Edge_detector
+      Port map ( 
+           clk =>clk100M,
+           reset =>signot_reset,
+           ce =>'1',
+           data_in =>BTNL,
+           data_out=>BTNL_Edge);
+      Edge_BTNC  :entity work.Edge_detector
+       Port map ( 
+           clk =>clk100M,
+           reset =>signot_reset,
+           ce =>'1',
+           data_in =>BTNC,
+           data_out=>BTNC_Edge);
+           
+       Edge_BTNR  :entity work.Edge_detector
+        Port map ( 
+           clk =>clk100M,
+           reset =>signot_reset,
+           ce =>'1',
+           data_in =>BTNR,
+           data_out=>BTNR_Edge);
+
        FSM  :entity work.FSM
-    Port map ( CE =>'1',
+       Port map ( CE =>'1',
            H  =>clk100M,
            RST=>signot_reset,
-           btnL=>BTNL,
-           btnC=>BTNC,
-           btnR=>BTNR,
+           btnL=>BTNL_Edge,
+           btnC=>BTNC_Edge,
+           btnR=>BTNR_Edge,
            A_read_type_piece=>type_piece,
            B_state_victoire=>victoire,
            
@@ -92,26 +117,31 @@ begin
            E_write_type_piece=>write_type_piece,
            F_RW_plateau=>F_RW_plateau,
            G_en_verif=>init_verif,
-           H_sel_LC=>H_sel_LC
+           H_sel_LC=>H_sel_LC,
+           I_AFF_plateau =>en_FDM_aff
            );
 
-        
-        
-            
-           
+        bascule_D_affichage: entity  work.bascule_D
+            port map (
+                clk =>clk100M,
+                reset =>signot_reset,
+                ce =>'1',
+                D =>en_FDM_aff,
+                Q=>en_FDM_aff_Q
+        );
 
         mux_L: entity  work.mux_L_C
         port map (
-                sel_mux =>F_RW_plateau,
-                in_data0 => compteur_addr_L,
-                in_data1 => addr_L_FSM,
+                sel_mux =>en_FDM_aff,
+                in_data1 => compteur_addr_L,
+                in_data0 => addr_L_FSM,
                 out_data =>out_addr_L
         );
         mux_C: entity  work.mux_L_C
         port map (
-                sel_mux =>F_RW_plateau,
-                in_data0 => compteur_addr_C,
-                in_data1 =>addr_C_FSM,
+                sel_mux =>en_FDM_aff,
+                in_data1 => compteur_addr_C,
+                in_data0 =>addr_C_FSM,
                 out_data =>out_addr_C
         );
         
@@ -121,7 +151,7 @@ begin
            H =>clk100M,
            RST  => signot_reset,
            W_ready=>W_ready,
-           en_FSM=>en_FDM_aff,
+           en_FSM=>en_FDM_aff_Q,
            out_en_affichage=>En_affichage,
            out_en_cpt=>en_cpt
             );
@@ -188,6 +218,6 @@ begin
           
          );
           signot_reset<=not(reset);
-          en_FDM_aff<=not(F_RW_plateau);
+        
           LED<=victoire;
     end Behavioral;

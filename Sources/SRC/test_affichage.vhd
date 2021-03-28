@@ -54,11 +54,11 @@ signal flag: std_logic :='0';
             if(clk = '1' and clk'event) then
             
                 if(Bp1 ='1' and Bp2 ='0'and Bp3 ='0'and Bp4 ='0' and Bp5 ='0')then
-                      out_num_figure<="001";
+                      out_num_figure<="101";
                       out_HG<=x"2211";
                       out_BD<=x"2B1A";
                 elsif(Bp1 ='0' and Bp2 ='1'and Bp3 ='0'and Bp4 ='0' and Bp5 ='0')then
-                      out_num_figure<="010";
+                      out_num_figure<="110";
                       out_HG<=  x"3011";
                       out_BD<= x"391A";
                 elsif(Bp1 ='0' and Bp2 ='0'and Bp3 ='1'and Bp4 ='0' and Bp5 ='0')then
@@ -66,11 +66,11 @@ signal flag: std_logic :='0';
                       out_HG<= x"3E11";
                       out_BD<= x"471A";
                 elsif(Bp1 ='0' and Bp2 ='0'and Bp3 ='0'and Bp4 ='1' and Bp5 ='0')then
-                      out_num_figure<="100";
+                      out_num_figure<="111";
                       out_HG<=x"4C11";                
                       out_BD<=x"551A";
                 elsif(Bp1 ='0' and Bp2 ='0'and Bp3 ='0'and Bp4 ='0' and Bp5 ='1')then
-                     out_num_figure<="000";
+                     out_num_figure<="100";
                      out_HG<=x"4C11";                
                      out_BD<=x"551A";
                 end if;
