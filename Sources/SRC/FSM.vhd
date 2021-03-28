@@ -222,7 +222,7 @@ begin
                     if (ligne_grille = "000") then
 						E_write_type_piece <= "111"; --white_square
 				    else
-						E_write_type_piece <= "011";  --blue_circle
+						E_write_type_piece <= "000";  --blue_circle
 					end if;    
                     F_RW_plateau        <= '1'; 
                     G_en_verif          <= '0';
