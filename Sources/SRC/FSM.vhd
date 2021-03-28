@@ -287,9 +287,6 @@ begin
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
                 
-                
-                
-                    
                 when Etat_Check_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
                     D_colonne_grille     <= colonne_check_mouv;
@@ -446,5 +443,40 @@ begin
                 end case;
             end if;
     end process white_grille;
+    
+    LED_State : process( pr_state )
+    begin
+    	case pr_state is
+    		when Etat_init =>
+    			J_Led_State <= "0000000000000001";
+    		when Etat_Init_grille =>
+    			J_Led_State <= "0000000000000010";
+    		when ATT_W_ready =>
+    			J_Led_State <= "0000000000000100";
+    		when Etat_Affichage_jeu =>
+    			J_Led_State <= "0000000000001000";
+    		when Etat_Effacer_pos =>
+    			J_Led_State <= "0000000000010000";
+    		when Etat_Incrementer =>
+    			J_Led_State <= "0000000000100000";
+    		when Etat_Decrementer =>
+    			J_Led_State <= "0000000001000000";
+    		when Etat_Ecriture_pos =>
+    			J_Led_State <= "0000000010000000";
+    		when Etat_Check_mouv =>
+    			J_Led_State <= "0000000100000000";
+    		when Etat_Effacer_mouv =>
+    			J_Led_State <= "0000001000000000";
+    		when Etat_Ecriture_mouv =>
+    			J_Led_State <= "0000010000000000";
+    		when Etat_Check_victoire =>
+    			J_Led_State <= "0000100000000000";
+    		when Etat_Victoire => 
+    			J_Led_State <= "0001000000000000";
+    		when others =>
+    			J_Led_State <= "1111111111111111";
+    	end case;
+    	
+    end process LED_State;
 
 end Behavioral;
