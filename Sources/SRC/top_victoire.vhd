@@ -43,7 +43,7 @@ entity top_victoire is
           VGA_G: out std_logic_vector(3 downto 0);
           VGA_HS: out std_logic;
           VGA_VS: out std_logic;
-          LED: out std_logic_vector(1 downto 0)
+          LED: out std_logic_vector(15 downto 0)
           );
 end top_victoire;
 
@@ -119,7 +119,8 @@ begin
            F_RW_plateau=>F_RW_plateau,
            G_en_verif=>init_verif,
            H_sel_LC=>H_sel_LC,
-           I_AFF_plateau =>en_FDM_aff
+           I_AFF_plateau =>en_FDM_aff,
+           J_Led_State => LED
            );
 
         bascule_D_affichage: entity  work.bascule_D
@@ -220,5 +221,5 @@ begin
          );
           signot_reset<=not(reset);
         
-          LED<=victoire;
+          --LED<=victoire;
     end Behavioral;
