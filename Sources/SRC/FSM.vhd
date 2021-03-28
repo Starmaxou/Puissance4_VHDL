@@ -48,7 +48,8 @@ entity FSM is
            F_RW_plateau         : out STD_LOGIC;
            G_en_verif           : out STD_LOGIC;
            H_sel_LC             : out STD_LOGIC;
-           I_AFF_plateau        : out STD_LOGIC
+           I_AFF_plateau        : out STD_LOGIC;
+           J_Led_State 			: out STD_LOGIC_VECTOR(15 downto 0)
            );
 end FSM;
 
