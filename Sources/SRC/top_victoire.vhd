@@ -43,7 +43,7 @@ entity top_victoire is
           VGA_G: out std_logic_vector(3 downto 0);
           VGA_HS: out std_logic;
           VGA_VS: out std_logic;
-          LED: out std_logic_vector(15 downto 0)
+          LED: out std_logic_vector(2 downto 0)
           );
 end top_victoire;
 
@@ -77,6 +77,10 @@ architecture Behavioral of top_victoire is
     signal BTNL_Edge: std_logic;
     signal BTNC_Edge: std_logic;
     signal BTNR_Edge: std_logic;
+    
+    signal CEaff: std_logic;
+    signal CEincrement: std_logic;
+    signal CETraitement: std_logic;
 begin
 
       Edge_BTNL  :entity work.Edge_detector
@@ -101,12 +105,22 @@ begin
            ce =>'1',
            data_in =>BTNR,
            data_out=>BTNR_Edge);
+           
+           Clock_manager  :entity work.Clock_manager
+        Port map ( 
+            H =>clk100M,
+           RAZ =>signot_reset,
+           CEaff => CEaff,
+           CEincrement=> CEincrement,
+           CETraitement=>CETraitement);
+           
+           
 
        FSM  :entity work.FSM
        Port map ( CE =>'1',
            H  =>clk100M,
            RST=>signot_reset,
-           btnL=>BTNL_Edge,
+           btnL=>CEincrement,
            btnC=>BTNC_Edge,
            btnR=>BTNR_Edge,
            A_read_type_piece=>type_piece,
@@ -120,7 +134,8 @@ begin
            G_en_verif=>init_verif,
            H_sel_LC=>H_sel_LC,
            I_AFF_plateau =>en_FDM_aff,
-           J_Led_State => LED
+           posled=>LED
+           --pos=>LED
            );
 
         bascule_D_affichage: entity  work.bascule_D
@@ -221,5 +236,5 @@ begin
          );
           signot_reset<=not(reset);
         
-          --LED<=victoire;
+        
     end Behavioral;

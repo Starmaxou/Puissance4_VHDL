@@ -44,9 +44,9 @@ entity Edge_detector is
 end Edge_detector;
 
 architecture Behavioral of Edge_detector is
-signal Q2: std_logic:='0';
-signal Q1: std_logic:='0';
-signal out_NOT: std_logic:='0';
+signal Q2: std_logic;
+signal Q1: std_logic;
+signal out_NOT: std_logic;
 begin
 
         bascule_D1 : entity work.bascule_D 

@@ -425,25 +425,16 @@ begin
     end process cal_output;
     
     
-    cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge)
+    cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge,buf_out_piece4_LC,buf_out_piece3_LC,buf_out_piece2_LC,buf_out_piece1_LC)
     begin
           
             if(pr_state =INIT_STATE_OFF)then
             
-                 piece1_LC<="0000000000000000";
-                 piece2_LC<="0000000000000000";
-                 piece3_LC<="0000000000000000";
-                 piece4_LC<="0000000000000000";
                  buf_out_piece1_LC<="0000000000000000";
                  buf_out_piece2_LC<="0000000000000000";
                  buf_out_piece3_LC<="0000000000000000";
                  buf_out_piece4_LC<="0000000000000000";
                  
-            elsif( cpt_piece4_rouge ="100" or cpt_piece4_jaune ="100")then
-                   piece4_LC<=buf_out_piece4_LC;
-                   piece3_LC<=buf_out_piece3_LC;
-                   piece2_LC<=buf_out_piece2_LC;
-                   piece1_LC<=buf_out_piece1_LC;
             else
                    buf_out_piece4_LC(15 downto 8) <=cpt_l_1;
                    buf_out_piece3_LC(15 downto 8) <=buf_out_piece4_LC(15 downto 8);
@@ -454,16 +445,31 @@ begin
                    buf_out_piece3_LC(7 downto 0) <=buf_out_piece4_LC(7 downto 0);
                    buf_out_piece2_LC(7 downto 0) <=buf_out_piece3_LC(7 downto 0);
                    buf_out_piece1_LC(7 downto 0) <=buf_out_piece2_LC(7 downto 0);
+                
             end if;                   
     end process cal_victoire;
     
+    cal_piece : process(cpt_piece4_jaune,cpt_piece4_rouge,buf_out_piece4_LC,buf_out_piece3_LC,buf_out_piece2_LC,buf_out_piece1_LC)
+    begin   
+            if( cpt_piece4_rouge ="100" or cpt_piece4_jaune ="100")then
+                   piece4_LC<=buf_out_piece4_LC;
+                   piece3_LC<=buf_out_piece3_LC;
+                   piece2_LC<=buf_out_piece2_LC;
+                   piece1_LC<=buf_out_piece1_LC;
+            else
+                   
+                   piece1_LC<="0000000000000000";
+                   piece2_LC<="0000000000000000";
+                   piece3_LC<="0000000000000000";
+                   piece4_LC<="0000000000000000";
+            end if;                   
+    end process cal_piece;
     
-    cal_piece_victoire : process(pr_state)
+    
+    cal_piece_victoire : process(pr_state,cpt_piece4_jaune,cpt_piece4_rouge)
     begin
           
-            if( pr_state =INIT_STATE_OFF )then
-                 out_victoire<="00";
-            elsif(pr_state =SEND)then
+            if(pr_state =SEND)then
                     
                      if(cpt_piece4_jaune >="100") then--4
                             out_victoire<="10";
@@ -472,6 +478,8 @@ begin
                      else
                             out_victoire<="11";
                      end if;
+            else
+                 out_victoire<="00";
             end if;                   
     end process cal_piece_victoire;
     
