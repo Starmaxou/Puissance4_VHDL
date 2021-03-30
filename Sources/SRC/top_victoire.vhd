@@ -42,8 +42,7 @@ entity top_victoire is
           VGA_B: out std_logic_vector(3 downto 0);
           VGA_G: out std_logic_vector(3 downto 0);
           VGA_HS: out std_logic;
-          VGA_VS: out std_logic;
-          LED: out std_logic_vector(2 downto 0)
+          VGA_VS: out std_logic
           );
 end top_victoire;
 
@@ -120,7 +119,7 @@ begin
        Port map ( CE =>'1',
            H  =>clk100M,
            RST=>signot_reset,
-           btnL=>CEincrement,
+           btnL=>BTNL_Edge,
            btnC=>BTNC_Edge,
            btnR=>BTNR_Edge,
            A_read_type_piece=>type_piece,
@@ -133,8 +132,8 @@ begin
            F_RW_plateau=>F_RW_plateau,
            G_en_verif=>init_verif,
            H_sel_LC=>H_sel_LC,
-           I_AFF_plateau =>en_FDM_aff,
-           posled=>LED
+           I_AFF_plateau =>en_FDM_aff
+          
            --pos=>LED
            );
 
