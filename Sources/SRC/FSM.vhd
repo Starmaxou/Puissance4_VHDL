@@ -54,11 +54,11 @@ end FSM;
 
 architecture Behavioral of FSM is
 
-    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
+    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu,Etat_next_player, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
-	signal pr_player, nx_player : Joueur := Joueur_Rouge;
+	signal player : Joueur := Joueur_Rouge; 
 	
 	
 	signal position :  unsigned (2 downto 0) := "000"; -- Curseur du joueur
@@ -73,7 +73,6 @@ architecture Behavioral of FSM is
 	-- check_mouv process
 	signal mouv_state : std_logic_vector (1 downto 0); -- Result of check_mouv
 	signal ligne_check_mouv :  std_logic_vector (2 downto 0);
-	signal ligne_check_mouv_r :  std_logic_vector (2 downto 0);
 	signal ligne_write_mouv :  std_logic_vector (2 downto 0);
 	
 	 
@@ -92,25 +91,16 @@ begin
         end if;
     end process maj_etat;
     
-    maj_joueur : process ( H , RST )
-        begin
-            if (RST ='1') then
-                pr_player <= Joueur_Rouge ;
-            elsif ( H' event and H ='1') then
-                if(CE = '1') then
-                    pr_player <= nx_player;
-                end if;
-            end if;
-        end process maj_joueur;
+   
 
 ------
 -- Calcul du nouvel etat en fonction des entrées
 ------    
-    cal_nx_state : process (pr_state, btnC, btnL, btnR, init_grille , mouv_state, B_state_victoire,W_Ready,pr_player)
+    cal_nx_state : process (pr_state, btnC, btnL, btnR, init_grille , mouv_state, B_state_victoire,W_Ready)
         begin
             case pr_state is
                 when Etat_Init =>
-                	nx_player <= Joueur_Rouge;
+                	
                     nx_state <= Etat_Init_grille;
                     
                 when Etat_Init_grille =>
@@ -187,16 +177,22 @@ begin
               
               
                 when Etat_Ecriture_mouv =>
-                    nx_state <= Etat_Affichage_jeu;
-                
+                   
+                           
+                            
+                    nx_state <= Etat_next_player;
+                 when Etat_next_player =>
+                      
+                    
+                    nx_state <= Etat_Affichage_jeu;   
                 when Etat_Check_victoire =>
                     case B_state_victoire is
                         when "11" =>
-                            case pr_player is
+                            case player is
                                 when Joueur_Rouge =>
-                                    nx_player <= Joueur_Jaune;
+                                    --player <= Joueur_Jaune;
                                 when Joueur_Jaune =>
-                                    nx_player <= Joueur_Rouge;
+                                    --player <= Joueur_Rouge;
                             end case;
                             nx_state <= Etat_Affichage_jeu;
                         when "10" =>    -- Yellow win
@@ -220,7 +216,7 @@ begin
 ------
 -- Mise à jours des sorties en fonction de l'état courant
 ------    
-    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,pr_player)
+    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,player)
         begin
             case pr_state is
                 when Etat_Init =>
@@ -246,7 +242,14 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
-                  
+                when Etat_next_player=>
+                    C_ligne_grille      <= "000";
+                    D_colonne_grille    <= "000";   
+                    E_write_type_piece  <= "000";
+                    F_RW_plateau        <= '0';
+                    G_en_verif          <= '0';
+                    H_sel_LC            <= '0';
+                    I_AFF_plateau       <= '0';
                 
                 when Etat_Affichage_jeu =>
                     C_ligne_grille      <= "000";
@@ -319,9 +322,9 @@ begin
                 when Etat_Ecriture_pos =>
                     C_ligne_grille      <= "000";
                     D_colonne_grille    <= std_logic_vector(position);   
-                    if (pr_player = Joueur_Rouge) then
+                    if (player = Joueur_Rouge) then
                         E_write_type_piece   <= "001";
-                    else 
+                    elsif (player = Joueur_Jaune)then
                         E_write_type_piece   <= "101";
                     end if;
                     F_RW_plateau        <= '1';
@@ -353,15 +356,16 @@ begin
 				when Etat_Ecriture_mouv =>
                     C_ligne_grille       <= ligne_write_mouv;
                     D_colonne_grille     <= std_logic_vector(position);
-                    if (pr_player = Joueur_Rouge) then
+                    if (player = Joueur_Rouge) then
                         E_write_type_piece   <= "010";
-                    else 
+                    elsif (player = Joueur_Jaune)then
                         E_write_type_piece   <= "110";
                     end if;
                     F_RW_plateau         <= '1';
                     G_en_verif           <= '0';
                     H_sel_LC             <= '0'; 
-                    I_AFF_plateau       <= '0';                                   
+                    I_AFF_plateau       <= '0';    
+                                             
 								
                 when Etat_Check_victoire =>
                     C_ligne_grille       <= "000";
@@ -417,11 +421,11 @@ begin
                     
                   end case;
                    ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
-                   ligne_check_mouv_r<=ligne_check_mouv;
+                   
             end if;
     end process  cpt_check_mouv;
     
-    check_mouv : process (H,RST,end_check,A_read_type_piece,pr_state,ligne_check_mouv_r)
+    check_mouv : process (H,RST,end_check,A_read_type_piece,pr_state)
         variable  nb_empty : integer range 0 to 6;
         begin
          if (RST = '1') then 
@@ -520,4 +524,23 @@ begin
                 end case;
             end if;
     end process white_grille;
-end Behavioral;
+
+update_player : process (pr_state,RST,H,player)
+        begin
+         if ( RST = '1') then
+                player <= Joueur_Rouge;
+            elsif ( H'event and H = '1') then
+            case pr_state is
+                when Etat_next_player =>
+                      case player is
+                          when Joueur_Rouge =>
+                                player <= Joueur_Jaune;
+                          when Joueur_Jaune =>
+                                player <= Joueur_Rouge;
+                        end case; 
+                    
+                when others =>
+            end case;    
+        end if;
+    end process update_player;
+ end Behavioral;
