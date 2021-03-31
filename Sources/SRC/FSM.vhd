@@ -63,6 +63,7 @@ architecture Behavioral of FSM is
 	
 	signal position :  unsigned (2 downto 0) := "000"; -- Curseur du joueur
 	signal end_check :   std_logic :='0';
+	signal r_end_check :   std_logic :='0';
 	-- white_grille process
 	signal init_grille :   std_logic;                          -- flag to check if initialization ok 
 	signal ligne_grille :  std_logic_vector (2 downto 0);      -- signal for initialization
@@ -72,6 +73,7 @@ architecture Behavioral of FSM is
 	-- check_mouv process
 	signal mouv_state : std_logic_vector (1 downto 0); -- Result of check_mouv
 	signal ligne_check_mouv :  std_logic_vector (2 downto 0);
+	signal ligne_check_mouv_r :  std_logic_vector (2 downto 0);
 	signal ligne_write_mouv :  std_logic_vector (2 downto 0);
 	
 	 
@@ -402,29 +404,33 @@ begin
             elsif (H'event and H = '1') then
               case pr_state is
                  when Etat_Check_mouv=>
-                    
-                        if(cpt_l<6)then
-                         
+                        if(cpt_l<6)then      
                           cpt_l :=  cpt_l +1;
                          else
-                          end_check<='1';
+                           r_end_check<='1';
+                           end_check<= r_end_check;
                         end if; 
                   when others=>
                      cpt_l := 0;  
-                     end_check<='0';
+                     r_end_check<='0';
+                     end_check<= r_end_check;
+                    
                   end case;
                    ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
+                   ligne_check_mouv_r<=ligne_check_mouv;
             end if;
     end process  cpt_check_mouv;
     
-    check_mouv : process ( H, RST,end_check,A_read_type_piece)
+    check_mouv : process (H,RST,end_check,A_read_type_piece,pr_state,ligne_check_mouv_r)
         variable  nb_empty : integer range 0 to 6;
         begin
-            if (RST = '1') then 
-               nb_empty := 0;
+         if (RST = '1') then 
+                  mouv_state <= "00";
+                  nb_empty:=0;
             elsif (H'event and H = '1') then
+          
                   if(pr_state=Etat_Check_mouv)then
-                       if (A_read_type_piece = "000") then -- il n'y a pas de jeton
+                       if (A_read_type_piece = "000" and end_check='0') then -- il n'y a pas de jeton
                            nb_empty := nb_empty + 1;
                        end if;
                        if( end_check='1')then
@@ -432,14 +438,15 @@ begin
                                   mouv_state <= "10";
                            else
                                   mouv_state <= "11";
-                                  ligne_write_mouv<=std_logic_vector(to_unsigned(nb_empty-1, 3));
                            end if;
 
                        end if;
+                       ligne_write_mouv<=std_logic_vector(to_unsigned(nb_empty, 3));
                   else
                      mouv_state <= "00";
+                     nb_empty:=0;
                   end if;
-            end if;
+           end if;
     end process  check_mouv;
     
     
