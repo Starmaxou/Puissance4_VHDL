@@ -54,7 +54,7 @@ end FSM;
 
 architecture Behavioral of FSM is
 
-    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL, Etat_Affichage_jeu, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
+    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
@@ -62,7 +62,7 @@ architecture Behavioral of FSM is
 	
 	
 	signal position :  unsigned (2 downto 0) := "000"; -- Curseur du joueur
-	
+	signal end_check :   std_logic :='0';
 	-- white_grille process
 	signal init_grille :   std_logic;                          -- flag to check if initialization ok 
 	signal ligne_grille :  std_logic_vector (2 downto 0);      -- signal for initialization
@@ -72,7 +72,8 @@ architecture Behavioral of FSM is
 	-- check_mouv process
 	signal mouv_state : std_logic_vector (1 downto 0); -- Result of check_mouv
 	signal ligne_check_mouv :  std_logic_vector (2 downto 0);
-	signal colonne_check_mouv :  std_logic_vector (2 downto 0);
+	signal ligne_write_mouv :  std_logic_vector (2 downto 0);
+	
 	 
 begin
 ------ 
@@ -118,18 +119,21 @@ begin
                     end if;
 
                 when Etat_Affichage_jeu =>
---                    if( btnC = '1' ) then
---                        nx_state <= Etat_check_mouv;
-                    if( btnL = '1' ) then
+                    if( btnC = '1' ) then
+                        nx_state <= ATT_W_readyC;
+                    elsif( btnL = '1' ) then
                         nx_state <= ATT_W_readyL;
                     elsif( btnR = '1' ) then
                        nx_state <= ATT_W_readyR;
                     else
                         nx_state <= Etat_Affichage_jeu;
                     end if;
-                
-                
-                
+               when ATT_W_readyC =>
+                      if(W_Ready='1')then
+                             nx_state<=Etat_Check_mouv;
+                        else
+                             nx_state<=ATT_W_readyC;
+                        end if;
                 
                when ATT_W_readyR =>
                         if(W_Ready='1')then
@@ -143,7 +147,9 @@ begin
                         else
                              nx_state<=ATT_W_readyL;
                         end if;
-                    
+            
+                         
+                         
                 when Etat_Effacer_posR =>
                     -- Effacement du jeton à la position actuelle
                   
@@ -170,14 +176,16 @@ begin
                         when "10" => -- mouvement non valide
                             nx_state <= Etat_Affichage_jeu;
                         when "11" => -- mouvement valide
-                            nx_state <= Etat_Effacer_posL;
+                            nx_state <= Etat_Effacer_mouv;
                         when others =>
                             nx_state <= Etat_Check_mouv;
                     end case;
-                    
-                
+                when Etat_Effacer_mouv =>    
+                    nx_state <=  Etat_Ecriture_mouv;
+              
+              
                 when Etat_Ecriture_mouv =>
-                    nx_state <= Etat_Check_victoire;
+                    nx_state <= Etat_Affichage_jeu;
                 
                 when Etat_Check_victoire =>
                     case B_state_victoire is
@@ -210,7 +218,7 @@ begin
 ------
 -- Mise à jours des sorties en fonction de l'état courant
 ------    
-    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv, colonne_check_mouv,position,pr_player)
+    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,pr_player)
         begin
             case pr_state is
                 when Etat_Init =>
@@ -228,7 +236,7 @@ begin
                     if (ligne_grille = "000" and  colonne_grille="000") then
                          E_write_type_piece <= "001"; --red_white		
 				    elsif(ligne_grille = "000")then
-				        E_write_type_piece <= "111"; --white_square
+				        E_write_type_piece <= "100"; --white_square
 				    else
 						E_write_type_piece <= "000";  --blue_circle
 					end if;    
@@ -262,6 +270,14 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                 when ATT_W_readyC =>    
+                    C_ligne_grille      <= "000";
+                    D_colonne_grille    <= "000";   
+                    E_write_type_piece  <= "000";
+                    F_RW_plateau        <= '0';
+                    G_en_verif          <= '0';
+                    H_sel_LC            <= '0';
+                    I_AFF_plateau       <= '0';
                 when Etat_Effacer_posR =>
                     C_ligne_grille      <= "000";
                     D_colonne_grille    <= std_logic_vector(position);   
@@ -278,7 +294,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
-                    
+                 
                 when Etat_Incrementer =>
                     C_ligne_grille       <= "000";
                     D_colonne_grille     <= "000";
@@ -316,7 +332,7 @@ begin
                     
                 when Etat_Check_mouv =>
                     C_ligne_grille       <= ligne_check_mouv;
-                    D_colonne_grille     <= colonne_check_mouv;
+                    D_colonne_grille     <= std_logic_vector(position);
                     E_write_type_piece   <= "000";
                     F_RW_plateau         <= '0';
                     G_en_verif           <= '0';
@@ -324,17 +340,17 @@ begin
                     I_AFF_plateau       <= '0';
                     
 				when Etat_Effacer_mouv =>
-                    C_ligne_grille       <= ligne_check_mouv;
-                    D_colonne_grille     <= colonne_check_mouv;
-                    E_write_type_piece   <= "000";
+                    C_ligne_grille       <= "000";
+                    D_colonne_grille     <= std_logic_vector(position);
+                    E_write_type_piece   <= "100";
                     F_RW_plateau         <= '1';
                     G_en_verif           <= '0';
                     H_sel_LC             <= '0';
                     I_AFF_plateau       <= '0';
 
 				when Etat_Ecriture_mouv =>
-                    C_ligne_grille       <= ligne_check_mouv;
-                    D_colonne_grille     <= colonne_check_mouv;
+                    C_ligne_grille       <= ligne_write_mouv;
+                    D_colonne_grille     <= std_logic_vector(position);
                     if (pr_player = Joueur_Rouge) then
                         E_write_type_piece   <= "010";
                     else 
@@ -375,52 +391,59 @@ begin
                                                                                       
             end case;
         end process cal_output;
-        
-    check_mouv : process ( H, RST)
-        variable cpt_l : integer range 1 to 6;
-        variable nb_empty : integer range 0 to 6;
+
+    
+    
+     cpt_check_mouv : process ( H, RST)
+        variable cpt_l : integer range 0 to 6;
         begin
-            if (RST = '1') then
-                mouv_state <= "00";
-                cpt_l := 1;
-                ligne_check_mouv <= "000";
-                colonne_check_mouv <= "000";
+            if (RST = '1') then 
+                cpt_l := 0;
             elsif (H'event and H = '1') then
-                case pr_state is
-                    when Etat_Check_mouv =>
-                        if (cpt_l < 6) then
-                            mouv_state <= "01";
-                            if (A_read_type_piece(1) = '0') then -- il n'y a pas de jeton
-                                nb_empty := nb_empty + 1;
-                            end if;
-                            cpt_l := cpt_l + 1;
-                        else
-                            if (nb_empty < 1) then
-                                mouv_state <= "10";
-                            else
-                                mouv_state <= "11";
-                                cpt_l := nb_empty;
-                            end if;
-                        end if;
-                        ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
-                        colonne_check_mouv <= std_logic_vector(position);
-                        
-					when Etat_Effacer_posR =>
-						mouv_state <= "11";
-                        ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
-                        colonne_check_mouv <= std_logic_vector(position);
-                        					
-                    when Etat_Ecriture_mouv =>
-                        ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
-                        colonne_check_mouv <= std_logic_vector(position);
-                    when others =>
-                        mouv_state <= "00";
-                        cpt_l := 1;
-                        nb_empty := 0;
-                end case;
-               
+              case pr_state is
+                 when Etat_Check_mouv=>
+                    
+                        if(cpt_l<6)then
+                         
+                          cpt_l :=  cpt_l +1;
+                         else
+                          end_check<='1';
+                        end if; 
+                  when others=>
+                     cpt_l := 0;  
+                     end_check<='0';
+                  end case;
+                   ligne_check_mouv <= std_logic_vector(to_unsigned(cpt_l, 3));
             end if;
-    end process check_mouv;
+    end process  cpt_check_mouv;
+    
+    check_mouv : process ( H, RST,end_check,A_read_type_piece)
+        variable  nb_empty : integer range 0 to 6;
+        begin
+            if (RST = '1') then 
+               nb_empty := 0;
+            elsif (H'event and H = '1') then
+                  if(pr_state=Etat_Check_mouv)then
+                       if (A_read_type_piece = "000") then -- il n'y a pas de jeton
+                           nb_empty := nb_empty + 1;
+                       end if;
+                       if( end_check='1')then
+                           if (nb_empty =0) then
+                                  mouv_state <= "10";
+                           else
+                                  mouv_state <= "11";
+                                  ligne_write_mouv<=std_logic_vector(to_unsigned(nb_empty-1, 3));
+                           end if;
+
+                       end if;
+                  else
+                     mouv_state <= "00";
+                  end if;
+            end if;
+    end process  check_mouv;
+    
+    
+    
         
     update_pos : process (pr_state,position,RST,H)
         begin
