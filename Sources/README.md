@@ -9,7 +9,7 @@
 # Gestion de l'écriture des jetons dans le plateau
 | A | B | C | Jeton         |
 |:-:|:-:|:-:|:-------------:|
-| 0 | 0 | 0 | Blanc         |
+| 0 | 0 | 0 | Case vide     |
 | 0 | 0 | 1 | Rouge_Blanc   |
 | 0 | 1 | 0 | Rouge_Bleu    |
 | 0 | 1 | 1 | Rouge_Vert    |
