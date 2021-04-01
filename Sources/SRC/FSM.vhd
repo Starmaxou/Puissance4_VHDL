@@ -40,7 +40,7 @@ entity FSM is
            btnR                 : in STD_LOGIC;
            A_read_type_piece    : in STD_LOGIC_VECTOR(2  downto 0);
            B_state_victoire     : in STD_LOGIC_VECTOR(1 downto 0);
-           W_Ready     : in STD_LOGIC;
+           W_Ready     			: in STD_LOGIC;
            
            C_ligne_grille       : out STD_LOGIC_VECTOR(2 downto 0);
            D_colonne_grille     : out STD_LOGIC_VECTOR(2 downto 0);

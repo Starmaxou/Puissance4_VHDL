@@ -19,6 +19,7 @@ architecture tb of tb_FSM is
               btnR               : in std_logic;
               A_read_type_piece  : in std_logic_vector (2  downto 0);
               B_state_victoire   : in std_logic_vector (1 downto 0);
+              W_Ready     		 : in STD_LOGIC;
               C_ligne_grille     : out std_logic_vector (2 downto 0);
               D_colonne_grille   : out std_logic_vector (2 downto 0);
               E_write_type_piece : out std_logic_vector (2 downto 0);
@@ -35,6 +36,7 @@ architecture tb of tb_FSM is
     signal btnR               : std_logic;
     signal A_read_type_piece  : std_logic_vector (2  downto 0);
     signal B_state_victoire   : std_logic_vector (1 downto 0);
+    signal W_Ready     		  : STD_LOGIC;
     signal C_ligne_grille     : std_logic_vector (2 downto 0);
     signal D_colonne_grille   : std_logic_vector (2 downto 0);
     signal E_write_type_piece : std_logic_vector (2 downto 0);
@@ -62,7 +64,8 @@ begin
               E_write_type_piece => E_write_type_piece,
               F_RW_plateau       => F_RW_plateau,
               G_en_verif         => G_en_verif,
-              H_sel_LC           => H_sel_LC);
+              H_sel_LC           => H_sel_LC,
+              W_Ready			 => W_Ready);
 
     -- Clock generation
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
@@ -77,6 +80,7 @@ begin
         btnL <= '0';
         btnC <= '0';
         btnR <= '0';
+        W_Ready <= '0';
         A_read_type_piece <= (others => '0');
         B_state_victoire <= (others => '0');
 
@@ -94,11 +98,20 @@ begin
         btnR <= '1';
         wait for 2 * TbPeriod;
         btnR <= '0';
-        wait for 2 * TbPeriod;
+        wait for 20 * TbPeriod;
+        
+        W_Ready <= '1';
+        wait for 20 * TbPeriod;
+        W_Ready <= '0';
+        
         btnR <= '1';
         wait for 2 * TbPeriod;
         btnR <= '0';
-        wait for 2 * TbPeriod;
+        wait for 20 * TbPeriod;
+        
+        W_Ready <= '1';
+        wait for 20 * TbPeriod;
+        W_Ready <= '0';
         
         wait for 50 * TbPeriod;
         
