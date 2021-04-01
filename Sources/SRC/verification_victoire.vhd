@@ -478,7 +478,7 @@ begin
                      else
                             out_victoire<="11";
                      end if;
-            else
+            elsif(pr_state=INIT_STATE_OFF)then
                  out_victoire<="00";
             end if;                   
     end process cal_piece_victoire;

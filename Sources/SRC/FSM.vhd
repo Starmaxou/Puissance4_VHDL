@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: ENSEIRB-MATMECA
--- Engineer: Maxime ALBERTY
+-- Engineer: Maxime ALBERTY & Clement SAVARY
 -- 
 -- Create Date: 24.02.2021 09:38:01
 -- Design Name: 
@@ -48,13 +48,14 @@ entity FSM is
            F_RW_plateau         : out STD_LOGIC;
            G_en_verif           : out STD_LOGIC;
            H_sel_LC             : out STD_LOGIC;
-           I_AFF_plateau        : out STD_LOGIC
+           I_AFF_plateau        : out STD_LOGIC;
+           LED : out STD_LOGIC_VECTOR(1  downto 0)
            );
 end FSM;
 
 architecture Behavioral of FSM is
 
-    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu,Etat_next_player, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv, Etat_Check_victoire, Etat_Victoire);
+    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu,Etat_next_player, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv,Etat_Check_victoire_init, Etat_Check_victoire, Etat_Victoire);
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
@@ -172,34 +173,29 @@ begin
                         when others =>
                             nx_state <= Etat_Check_mouv;
                     end case;
+                    
                 when Etat_Effacer_mouv =>    
                     nx_state <=  Etat_Ecriture_mouv;
-              
-              
-                when Etat_Ecriture_mouv =>
-                    nx_state <= Etat_next_player;
-                 when Etat_next_player =>
-                      
                     
-                    nx_state <= Etat_Ecriture_pos;   
+                when Etat_Ecriture_mouv =>
+                    nx_state <= Etat_Check_victoire_init;
+                    
+                when Etat_next_player =>
+                     nx_state <= Etat_Affichage_jeu;
+                 
+                when Etat_Check_victoire_init =>
+                  nx_state <= Etat_Check_victoire;
                 when Etat_Check_victoire =>
                     case B_state_victoire is
                         when "11" =>
-                            case player is
-                                when Joueur_Rouge =>
-                                    --player <= Joueur_Jaune;
-                                when Joueur_Jaune =>
-                                    --player <= Joueur_Rouge;
-                            end case;
-                            nx_state <= Etat_Affichage_jeu;
+                            nx_state <= Etat_next_player;
                         when "10" =>    -- Yellow win
                             nx_state <= Etat_Victoire;
                         when "01" =>    -- Red win
                             nx_state <= Etat_Victoire;
                         when others =>    -- Check_victoire ongoing
                             nx_state <= Etat_Check_victoire;
-                    end case;
-                                
+                    end case;       
                 when Etat_Victoire =>
                     if( btnC = '1' ) then
                         nx_state <= Etat_Init;
@@ -364,7 +360,7 @@ begin
                     I_AFF_plateau       <= '0';    
                                              
 								
-                when Etat_Check_victoire =>
+                when Etat_Check_victoire_init =>
                     C_ligne_grille       <= "000";
                     D_colonne_grille     <= "000";
                     E_write_type_piece   <= "000";
@@ -373,7 +369,15 @@ begin
                     H_sel_LC            <= '1';
                     I_AFF_plateau       <= '0';
                     
-                
+                when Etat_Check_victoire =>
+                    C_ligne_grille       <= "000";
+                    D_colonne_grille     <= "000";
+                    E_write_type_piece   <= "000";
+                    F_RW_plateau         <= '0';
+                    G_en_verif           <= '0';
+                    H_sel_LC            <= '1';
+                    I_AFF_plateau       <= '0';
+                    
                 when Etat_Victoire =>
                     C_ligne_grille       <= "000";
                     D_colonne_grille     <= "000";
@@ -382,6 +386,7 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    LED <=B_state_victoire;
                 
                 when others =>
                     C_ligne_grille       <= "000";
