@@ -177,14 +177,11 @@ begin
               
               
                 when Etat_Ecriture_mouv =>
-                   
-                           
-                            
                     nx_state <= Etat_next_player;
                  when Etat_next_player =>
                       
                     
-                    nx_state <= Etat_Affichage_jeu;   
+                    nx_state <= Etat_Ecriture_pos;   
                 when Etat_Check_victoire =>
                     case B_state_victoire is
                         when "11" =>
