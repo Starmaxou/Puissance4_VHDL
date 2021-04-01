@@ -40,6 +40,10 @@ entity FSM is
            btnR                 : in STD_LOGIC;
            A_read_type_piece    : in STD_LOGIC_VECTOR(2  downto 0);
            B_state_victoire     : in STD_LOGIC_VECTOR(1 downto 0);
+           piece1_LC : in STD_LOGIC_VECTOR (15 downto 0);
+           piece2_LC : in  STD_LOGIC_VECTOR (15 downto 0);
+           piece3_LC : in  STD_LOGIC_VECTOR (15 downto 0);
+           piece4_LC : in  STD_LOGIC_VECTOR (15 downto 0);
            W_Ready     : in STD_LOGIC;
            
            C_ligne_grille       : out STD_LOGIC_VECTOR(2 downto 0);
@@ -56,7 +60,7 @@ end FSM;
 
 architecture Behavioral of FSM is
 
-    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu,Etat_next_player, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv,Etat_Check_victoire_init, Etat_Check_victoire, Etat_Victoire);
+    type Etat is ( Etat_init, Etat_Init_grille,ATT_W_readyR,ATT_W_readyL,ATT_W_readyC, Etat_Affichage_jeu,Etat_next_player, Etat_Effacer_posL,Etat_Effacer_posR, Etat_Incrementer, Etat_Decrementer, Etat_Ecriture_pos, Etat_Check_mouv, Etat_Effacer_mouv, Etat_Ecriture_mouv,Etat_Check_victoire_init, Etat_Check_victoire,Etat_Write_piece1,Etat_Write_piece2,Etat_Write_piece3,Etat_Write_piece4, Etat_Victoire);
 	signal pr_state , nx_state : Etat := Etat_init;
 	
 	type Joueur is (Joueur_Rouge, Joueur_Jaune);
@@ -185,29 +189,28 @@ begin
                      nx_state <= Etat_Ecriture_pos;
                  
                 when Etat_Check_victoire_init =>
-                   if(B_state_victoire="00")then
-                    nx_state <= Etat_Check_victoire;
-                  end if;
+                  nx_state <= Etat_Check_victoire;
                 when Etat_Check_victoire =>
                     case B_state_victoire is
                         when "11" =>
                             nx_state <= Etat_next_player;
                         when "10" =>    -- Yellow win
-                            
-                              nx_state <= Etat_Victoire;
-                            
+                            nx_state <= Etat_Write_piece1;
                         when "01" =>    -- Red win
-                             
-                              nx_state <= Etat_Victoire;
-                             
-                          
+                            nx_state <= Etat_Write_piece1;
                         when others =>    -- Check_victoire ongoing
                             nx_state <= Etat_Check_victoire;
                     end case;    
                     
-               
-                
-                  
+                  when Etat_Write_piece1 =>   
+                           nx_state <= Etat_Write_piece2;
+                  when Etat_Write_piece2 =>   
+                           nx_state <= Etat_Write_piece3;
+                  when Etat_Write_piece3 =>   
+                           nx_state <= Etat_Write_piece4;
+                  when Etat_Write_piece4 =>   
+                           nx_state <= Etat_Victoire;
+                    
                        
                 when Etat_Victoire =>
                 
@@ -226,7 +229,7 @@ begin
 ------
 -- Mise à jours des sorties en fonction de l'état courant
 ------    
-    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,player,B_state_victoire)
+    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,player)
         begin
             case pr_state is
                 when Etat_Init =>
@@ -252,7 +255,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
-                    LED<="00";
+                    LED <="00";
                 when Etat_next_player=>
                     C_ligne_grille      <= "000";
                     D_colonne_grille    <= "000";   
@@ -395,8 +398,75 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC            <= '1';
                     I_AFF_plateau       <= '0';
-                    LED<=B_state_victoire;
-              
+                    LED <=B_state_victoire;
+                when Etat_Write_piece1 =>        
+                    C_ligne_grille       <= piece1_LC(2 downto 0);
+                    D_colonne_grille     <= piece1_LC(10 downto 8);
+                    
+                    if (B_state_victoire = "01") then
+                         E_write_type_piece <= "011"; --red_green		
+				    elsif(B_state_victoire = "10")then
+				        E_write_type_piece <= "111"; --yellow_green
+					end if;   
+                    
+                    
+                    
+                    F_RW_plateau         <= '1';
+                    G_en_verif           <= '0';
+                    H_sel_LC            <= '0';
+                    I_AFF_plateau       <= '0';
+                    LED <=B_state_victoire;
+                when Etat_Write_piece2 =>        
+                    C_ligne_grille       <= piece2_LC(2 downto 0);
+                    D_colonne_grille     <= piece2_LC(10 downto 8);
+                    
+                    if (B_state_victoire = "01") then
+                         E_write_type_piece <= "011"; --red_green		
+				    elsif(B_state_victoire = "10")then
+				        E_write_type_piece <= "111"; --yellow_green
+					end if;   
+                    
+                   
+                    
+                    F_RW_plateau         <= '1';
+                    G_en_verif           <= '0';
+                    H_sel_LC            <= '0';
+                    I_AFF_plateau       <= '0';
+                    LED <=B_state_victoire;    
+              when Etat_Write_piece3 =>        
+                    C_ligne_grille       <= piece3_LC(2 downto 0);
+                    D_colonne_grille     <= piece3_LC(10 downto 8);
+                    
+                    if (B_state_victoire = "01") then
+                         E_write_type_piece <= "011"; --red_green		
+				    elsif(B_state_victoire = "10")then
+				        E_write_type_piece <= "111"; --yellow_green
+					end if;   
+                    
+                  
+                    
+                    F_RW_plateau         <= '1';
+                    G_en_verif           <= '0';
+                    H_sel_LC            <= '0';
+                    I_AFF_plateau       <= '0';
+                    LED <=B_state_victoire;         
+                when Etat_Write_piece4 =>        
+                    C_ligne_grille       <= piece4_LC(2 downto 0);
+                    D_colonne_grille     <= piece4_LC(10 downto 8);
+                    
+                    if (B_state_victoire = "01") then
+                         E_write_type_piece <= "011"; --red_green		
+				    elsif(B_state_victoire = "10")then
+				        E_write_type_piece <= "111"; --yellow_green
+					end if;   
+                    
+                    
+                    
+                    F_RW_plateau         <= '1';
+                    G_en_verif           <= '0';
+                    H_sel_LC            <= '0';
+                    I_AFF_plateau       <= '0';
+                    LED <=B_state_victoire;     
                     
                 when Etat_Victoire =>
                     C_ligne_grille      <= "000";
@@ -407,7 +477,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '1';
-
+                   
                 
                 when others =>
                     C_ligne_grille       <= "000";
@@ -546,8 +616,6 @@ begin
                 end case;
             end if;
     end process white_grille;
-    
-    
 
 update_player : process (pr_state,RST,H,player)
         begin
@@ -567,6 +635,5 @@ update_player : process (pr_state,RST,H,player)
             end case;    
         end if;
     end process update_player;
-   
    
  end Behavioral;

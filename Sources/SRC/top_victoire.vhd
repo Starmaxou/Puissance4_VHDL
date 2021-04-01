@@ -42,7 +42,8 @@ entity top_victoire is
           VGA_B: out std_logic_vector(3 downto 0);
           VGA_G: out std_logic_vector(3 downto 0);
           VGA_HS: out std_logic;
-          VGA_VS: out std_logic
+          VGA_VS: out std_logic;
+          LED :out std_logic_vector(1 downto 0)
           );
 end top_victoire;
 
@@ -58,6 +59,8 @@ architecture Behavioral of top_victoire is
     signal verif_addr_C: std_logic_vector(2 downto 0);
     signal addr_L_FSM: std_logic_vector(2 downto 0);
     signal addr_C_FSM: std_logic_vector(2 downto 0);
+    signal addr_L_FSM_cpt: std_logic_vector(2 downto 0);
+    signal addr_C_FSM_cpt: std_logic_vector(2 downto 0);
     signal signot_Reset: std_logic;
     signal W_ready: std_logic;
     signal victoire: std_logic_vector(1 downto 0);
@@ -124,7 +127,8 @@ begin
            btnR=>BTNR_Edge,
            A_read_type_piece=>type_piece,
            B_state_victoire=>victoire,
-             W_Ready  =>W_Ready,
+           W_Ready  =>W_Ready,
+          
            
            C_ligne_grille =>addr_L_FSM,
            D_colonne_grille=>addr_C_FSM,
@@ -132,9 +136,9 @@ begin
            F_RW_plateau=>F_RW_plateau,
            G_en_verif=>init_verif,
            H_sel_LC=>H_sel_LC,
-           I_AFF_plateau =>en_FDM_aff
+           I_AFF_plateau =>en_FDM_aff,
           
-           --pos=>LED
+           LED=>LED
            );
 
         bascule_D_affichage: entity  work.bascule_D
@@ -151,13 +155,28 @@ begin
                 sel_mux =>en_FDM_aff,
                 in_data1 => compteur_addr_L,
                 in_data0 => addr_L_FSM,
-                out_data =>out_addr_L
+                out_data =>addr_L_FSM_cpt
         );
         mux_C: entity  work.mux_L_C
         port map (
                 sel_mux =>en_FDM_aff,
                 in_data1 => compteur_addr_C,
                 in_data0 =>addr_C_FSM,
+                out_data =>addr_C_FSM_cpt
+        );
+        
+         mux_L_V: entity  work.mux_L_C
+        port map (
+                sel_mux =>H_sel_LC,
+                in_data1 => verif_addr_L,
+                in_data0 => addr_L_FSM_cpt,
+                out_data =>out_addr_L
+        );
+        mux_C_V: entity  work.mux_L_C
+        port map (
+                sel_mux =>H_sel_LC,
+                in_data1 => verif_addr_C,
+                in_data0 =>addr_C_FSM_cpt,
                 out_data =>out_addr_C
         );
         
