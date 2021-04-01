@@ -127,7 +127,8 @@ begin
            btnR=>BTNR_Edge,
            A_read_type_piece=>type_piece,
            B_state_victoire=>victoire,
-             W_Ready  =>W_Ready,
+           W_Ready  =>W_Ready,
+          
            
            C_ligne_grille =>addr_L_FSM,
            D_colonne_grille=>addr_C_FSM,

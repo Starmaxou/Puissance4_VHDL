@@ -49,7 +49,7 @@ entity verification_victoire is
 end verification_victoire;
 
 architecture Behavioral of verification_victoire is
- TYPE Etat IS (INIT_STATE_ON,INIT_STATE_OFF,FIN,SEND,CHECK_LIGNE,CHECK_COLONNE,CHECK_DIAGONALE_G1,CHECK_DIAGONALE_G2,CHECK_DIAGONALE_G3,CHECK_DIAGONALE_G4,CHECK_DIAGONALE_G5,CHECK_DIAGONALE_G6,CHECK_DIAGONALE_D1,CHECK_DIAGONALE_D2,CHECK_DIAGONALE_D3,CHECK_DIAGONALE_D4,CHECK_DIAGONALE_D5,CHECK_DIAGONALE_D6,TMP);
+ TYPE Etat IS (INIT_STATE_ON,INIT_STATE_OFF,FIN,SEND,TMP,CHECK_LIGNE,CHECK_COLONNE,CHECK_DIAGONALE_G1,CHECK_DIAGONALE_G2,CHECK_DIAGONALE_G3,CHECK_DIAGONALE_G4,CHECK_DIAGONALE_G5,CHECK_DIAGONALE_G6,CHECK_DIAGONALE_D1,CHECK_DIAGONALE_D2,CHECK_DIAGONALE_D3,CHECK_DIAGONALE_D4,CHECK_DIAGONALE_D5,CHECK_DIAGONALE_D6);
  signal pr_state , nx_state  : Etat := INIT_STATE_ON;
  SIGNAL cpt_c:  STD_LOGIC_VECTOR (7 downto 0);
  SIGNAL cpt_l : STD_LOGIC_VECTOR (7 downto 0);
@@ -425,17 +425,28 @@ begin
     end process cal_output;
     
     
-    cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge,buf_out_piece4_LC,buf_out_piece3_LC,buf_out_piece2_LC,buf_out_piece1_LC)
+ cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge)
     begin
           
             if(pr_state =INIT_STATE_OFF)then
             
+                 piece1_LC<="0000000000000000";
+                 piece2_LC<="0000000000000000";
+                 piece3_LC<="0000000000000000";
+                 piece4_LC<="0000000000000000";
                  buf_out_piece1_LC<="0000000000000000";
                  buf_out_piece2_LC<="0000000000000000";
                  buf_out_piece3_LC<="0000000000000000";
                  buf_out_piece4_LC<="0000000000000000";
                  
-            else
+           
+             end if;           
+             if( cpt_piece4_jaune="100"or cpt_piece4_rouge="100" )then
+                   piece4_LC<=buf_out_piece4_LC;
+                   piece3_LC<=buf_out_piece3_LC;
+                   piece2_LC<=buf_out_piece2_LC;
+                   piece1_LC<=buf_out_piece1_LC;
+             else
                    buf_out_piece4_LC(15 downto 8) <=cpt_l_1;
                    buf_out_piece3_LC(15 downto 8) <=buf_out_piece4_LC(15 downto 8);
                    buf_out_piece2_LC(15 downto 8) <=buf_out_piece3_LC(15 downto 8);
@@ -445,25 +456,9 @@ begin
                    buf_out_piece3_LC(7 downto 0) <=buf_out_piece4_LC(7 downto 0);
                    buf_out_piece2_LC(7 downto 0) <=buf_out_piece3_LC(7 downto 0);
                    buf_out_piece1_LC(7 downto 0) <=buf_out_piece2_LC(7 downto 0);
-                
-            end if;                   
+             
+            end if;       
     end process cal_victoire;
-    
-    cal_piece : process(cpt_piece4_jaune,cpt_piece4_rouge,buf_out_piece4_LC,buf_out_piece3_LC,buf_out_piece2_LC,buf_out_piece1_LC)
-    begin   
-            if( cpt_piece4_rouge ="100" or cpt_piece4_jaune ="100")then
-                   piece4_LC<=buf_out_piece4_LC;
-                   piece3_LC<=buf_out_piece3_LC;
-                   piece2_LC<=buf_out_piece2_LC;
-                   piece1_LC<=buf_out_piece1_LC;
-            else
-                   
-                   piece1_LC<="0000000000000000";
-                   piece2_LC<="0000000000000000";
-                   piece3_LC<="0000000000000000";
-                   piece4_LC<="0000000000000000";
-            end if;                   
-    end process cal_piece;
     
     
     cal_piece_victoire : process(pr_state,cpt_piece4_jaune,cpt_piece4_rouge)
@@ -494,6 +489,7 @@ begin
                    cpt_piece_rouge := 0;
                  elsif ( clk' event and clk='1') then
                   if(ce = '1') then
+                 
                          if( pr_state /=INIT_STATE_ON and pr_state /=INIT_STATE_OFF and pr_state /=SEND)then
                                 if(cpt_piece_jaune<4) then
                                    if( in_data="110")then --jaune
@@ -516,8 +512,13 @@ begin
                                         end if;
                                    end if;
                                 end if;
-                           
-                         end if; 
+                         elsif(pr_state =INIT_STATE_ON)then
+                          cpt_piece_jaune := 0;
+                          cpt_piece_rouge := 0;
+                         
+                         end if;
+                        
+                          
                              cpt_piece4_jaune<= std_logic_vector(to_unsigned(cpt_piece_jaune, 3));
                              cpt_piece4_rouge<= std_logic_vector(to_unsigned(cpt_piece_rouge, 3));
                     end if;

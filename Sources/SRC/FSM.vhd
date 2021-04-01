@@ -49,6 +49,7 @@ entity FSM is
            G_en_verif           : out STD_LOGIC;
            H_sel_LC             : out STD_LOGIC;
            I_AFF_plateau        : out STD_LOGIC;
+          
            LED : out STD_LOGIC_VECTOR(1  downto 0)
            );
 end FSM;
@@ -181,25 +182,41 @@ begin
                     nx_state <= Etat_Check_victoire_init;
                     
                 when Etat_next_player =>
-                     nx_state <= Etat_Affichage_jeu;
+                     nx_state <= Etat_Ecriture_pos;
                  
                 when Etat_Check_victoire_init =>
-                  nx_state <= Etat_Check_victoire;
+                   if(B_state_victoire="00")then
+                    nx_state <= Etat_Check_victoire;
+                  end if;
                 when Etat_Check_victoire =>
                     case B_state_victoire is
                         when "11" =>
                             nx_state <= Etat_next_player;
                         when "10" =>    -- Yellow win
-                            nx_state <= Etat_Victoire;
+                            
+                              nx_state <= Etat_Victoire;
+                            
                         when "01" =>    -- Red win
-                            nx_state <= Etat_Victoire;
+                             
+                              nx_state <= Etat_Victoire;
+                             
+                          
                         when others =>    -- Check_victoire ongoing
                             nx_state <= Etat_Check_victoire;
-                    end case;       
+                    end case;    
+                    
+               
+                
+                  
+                       
                 when Etat_Victoire =>
-                    if( btnC = '1' ) then
-                        nx_state <= Etat_Init;
-                    end if;
+                
+                
+                
+                
+                    --if( btnC = '1' ) then
+                        nx_state <= Etat_Victoire;
+                   -- end if;
                     
                 when others =>
                     nx_state <= Etat_Init_grille;
@@ -209,7 +226,7 @@ begin
 ------
 -- Mise à jours des sorties en fonction de l'état courant
 ------    
-    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,player)
+    cal_output : process( pr_state, ligne_grille, colonne_grille, ligne_check_mouv,position,player,B_state_victoire)
         begin
             case pr_state is
                 when Etat_Init =>
@@ -235,6 +252,7 @@ begin
                     G_en_verif          <= '0';
                     H_sel_LC            <= '0';
                     I_AFF_plateau       <= '0';
+                    LED<="00";
                 when Etat_next_player=>
                     C_ligne_grille      <= "000";
                     D_colonne_grille    <= "000";   
@@ -377,16 +395,19 @@ begin
                     G_en_verif           <= '0';
                     H_sel_LC            <= '1';
                     I_AFF_plateau       <= '0';
+                    LED<=B_state_victoire;
+              
                     
                 when Etat_Victoire =>
-                    C_ligne_grille       <= "000";
-                    D_colonne_grille     <= "000";
-                    E_write_type_piece   <= "000";
-                    F_RW_plateau         <= '0';
-                    G_en_verif           <= '0';
+                    C_ligne_grille      <= "000";
+                    C_ligne_grille      <= "000";
+                    D_colonne_grille    <= "000";   
+                    E_write_type_piece  <= "000";
+                    F_RW_plateau        <= '0';
+                    G_en_verif          <= '0';
                     H_sel_LC            <= '0';
-                    I_AFF_plateau       <= '0';
-                    LED <=B_state_victoire;
+                    I_AFF_plateau       <= '1';
+
                 
                 when others =>
                     C_ligne_grille       <= "000";
@@ -464,7 +485,7 @@ begin
                position <= "000";
             elsif ( H'event and H = '1') then
             case pr_state is
-                when Etat_init =>
+                when Etat_init_grille =>
                      position <= "000";
                 when Etat_Incrementer =>
                     if ( position = "110" ) then
@@ -479,8 +500,7 @@ begin
                     else
                         position <= position - 1;
                     end if;
-                when Etat_Check_victoire =>
-                    position <= "000";
+
                     
                 when others =>
             end case;    
@@ -526,6 +546,8 @@ begin
                 end case;
             end if;
     end process white_grille;
+    
+    
 
 update_player : process (pr_state,RST,H,player)
         begin
@@ -545,4 +567,6 @@ update_player : process (pr_state,RST,H,player)
             end case;    
         end if;
     end process update_player;
+   
+   
  end Behavioral;
