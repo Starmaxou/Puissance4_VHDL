@@ -74,10 +74,9 @@ begin
                         out_data <= yellow_white(to_integer(unsigned(in_addr_figure)));
                     when "110" =>
                          out_data <= yellow_blue(to_integer(unsigned(in_addr_figure)));
-                    when "111" =>
-                         out_data <= yellow_green(to_integer(unsigned(in_addr_figure)));
                     when others =>
-                         out_data <= white_square(to_integer(unsigned(in_addr_figure)));
+                         out_data <= yellow_green(to_integer(unsigned(in_addr_figure)));
+             
                 end case;          
             end if;
          end if;

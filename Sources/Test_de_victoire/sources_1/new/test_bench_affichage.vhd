@@ -68,8 +68,7 @@ top_affichage : entity  work.top_affichage
                   VGA_B =>VGA_B,
                   VGA_G =>VGA_G,
                   VGA_HS =>VGA_HS,
-                  VGA_VS=> VGA_VS,
-                  Write_ready_out=>  Write_ready
+                  VGA_VS=> VGA_VS
                 );  
   test_affichage : entity  work.test_affichage
     port map( 

@@ -32,16 +32,18 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity top_victoire is
-        port( reset : in std_logic ;
+        port(
+          reset : in std_logic ;
           clk100M : in std_logic;
           BTNC: in std_logic;
-          BTNU: in std_logic;
+          BTNL: in std_logic;
+          BTNR: in std_logic;
           VGA_R: out std_logic_vector(3 downto 0);
           VGA_B: out std_logic_vector(3 downto 0);
           VGA_G: out std_logic_vector(3 downto 0);
           VGA_HS: out std_logic;
           VGA_VS: out std_logic;
-          LED: out std_logic_vector(1 downto 0)
+          LED :out std_logic_vector(1 downto 0)
           );
 end top_victoire;
 
@@ -55,47 +57,129 @@ architecture Behavioral of top_victoire is
     signal compteur_addr_C: std_logic_vector(2 downto 0);
     signal verif_addr_L: std_logic_vector(2 downto 0);
     signal verif_addr_C: std_logic_vector(2 downto 0);
+    signal addr_L_FSM: std_logic_vector(2 downto 0);
+    signal addr_C_FSM: std_logic_vector(2 downto 0);
+    signal addr_L_FSM_cpt: std_logic_vector(2 downto 0);
+    signal addr_C_FSM_cpt: std_logic_vector(2 downto 0);
     signal signot_Reset: std_logic;
     signal W_ready: std_logic;
     signal victoire: std_logic_vector(1 downto 0);
     signal En_affichage: std_logic;
     signal en_cpt: std_logic;
     signal en_FDM_aff: std_logic;
-    signal sel_ADDR: std_logic;
+    signal en_FDM_aff_Q: std_logic;
     signal init_verif: std_logic;
-    signal R_W_grille: std_logic;
-    signal out_piece_verte: std_logic_vector(2 downto 0);
+    signal write_type_piece: std_logic_vector(2 downto 0);
+    signal piece1_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal piece2_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal piece3_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal piece4_LC : STD_LOGIC_VECTOR (15 downto 0);
+    signal F_RW_plateau: std_logic;
+    signal H_sel_LC: std_logic;
+    signal BTNL_Edge: std_logic;
+    signal BTNC_Edge: std_logic;
+    signal BTNR_Edge: std_logic;
     
+    signal CEaff: std_logic;
+    signal CEincrement: std_logic;
+    signal CETraitement: std_logic;
 begin
 
-        
-        
-         FSM_top: entity  work.FSM_test_top
-         port map (
-           CE =>'1',
-           H =>clk100M,
-           RST  => signot_reset,
-           res_victoire=>victoire,
-           BP_affiche =>BTNC,
-           BP_victoire =>BTNU,
-           init_verif => init_verif,
-           en_affichage =>en_FDM_aff,
-           SEL_ADDR =>sel_ADDR
+      Edge_BTNL  :entity work.Edge_detector
+      Port map ( 
+           clk =>clk100M,
+           reset =>signot_reset,
+           ce =>'1',
+           data_in =>BTNL,
+           data_out=>BTNL_Edge);
+      Edge_BTNC  :entity work.Edge_detector
+       Port map ( 
+           clk =>clk100M,
+           reset =>signot_reset,
+           ce =>'1',
+           data_in =>BTNC,
+           data_out=>BTNC_Edge);
+           
+       Edge_BTNR  :entity work.Edge_detector
+        Port map ( 
+           clk =>clk100M,
+           reset =>signot_reset,
+           ce =>'1',
+           data_in =>BTNR,
+           data_out=>BTNR_Edge);
+           
+           Clock_manager  :entity work.Clock_manager
+        Port map ( 
+            H =>clk100M,
+           RAZ =>signot_reset,
+           CEaff => CEaff,
+           CEincrement=> CEincrement,
+           CETraitement=>CETraitement);
+           
+           
+
+       FSM  :entity work.FSM
+       Port map ( CE =>'1',
+           H  =>clk100M,
+           RST=>signot_reset,
+           btnL=>BTNL_Edge,
+           btnC=>BTNC_Edge,
+           btnR=>BTNR_Edge,
+           A_read_type_piece=>type_piece,
+           B_state_victoire=>victoire,
+           W_Ready  =>W_Ready,
+           piece1_LC =>piece1_LC,
+           piece2_LC =>piece2_LC,
+           piece3_LC =>piece3_LC,
+           piece4_LC =>piece4_LC,
+           
+           C_ligne_grille =>addr_L_FSM,
+           D_colonne_grille=>addr_C_FSM,
+           E_write_type_piece=>write_type_piece,
+           F_RW_plateau=>F_RW_plateau,
+           G_en_verif=>init_verif,
+           H_sel_LC=>H_sel_LC,
+           I_AFF_plateau =>en_FDM_aff,
           
-            );
+           LED=>LED
+           );
+
+        bascule_D_affichage: entity  work.bascule_D
+            port map (
+                clk =>clk100M,
+                reset =>signot_reset,
+                ce =>'1',
+                D =>en_FDM_aff,
+                Q=>en_FDM_aff_Q
+        );
 
         mux_L: entity  work.mux_L_C
         port map (
-                sel_mux =>sel_ADDR,
-                in_data0 => compteur_addr_L,
-                in_data1 => verif_addr_L,
-                out_data =>out_addr_L
+                sel_mux =>en_FDM_aff,
+                in_data1 => compteur_addr_L,
+                in_data0 => addr_L_FSM,
+                out_data =>addr_L_FSM_cpt
         );
         mux_C: entity  work.mux_L_C
         port map (
-                sel_mux =>sel_ADDR,
-                in_data0 => compteur_addr_C,
-                in_data1 =>verif_addr_C,
+                sel_mux =>en_FDM_aff,
+                in_data1 => compteur_addr_C,
+                in_data0 =>addr_C_FSM,
+                out_data =>addr_C_FSM_cpt
+        );
+        
+         mux_L_V: entity  work.mux_L_C
+        port map (
+                sel_mux =>H_sel_LC,
+                in_data1 => verif_addr_L,
+                in_data0 => addr_L_FSM_cpt,
+                out_data =>out_addr_L
+        );
+        mux_C_V: entity  work.mux_L_C
+        port map (
+                sel_mux =>H_sel_LC,
+                in_data1 => verif_addr_C,
+                in_data0 =>addr_C_FSM_cpt,
                 out_data =>out_addr_C
         );
         
@@ -105,7 +189,7 @@ begin
            H =>clk100M,
            RST  => signot_reset,
            W_ready=>W_ready,
-           en_FSM=>en_FDM_aff,
+           en_FSM=>en_FDM_aff_Q,
            out_en_affichage=>En_affichage,
            out_en_cpt=>en_cpt
             );
@@ -138,8 +222,8 @@ begin
            clk =>clk100M,
            ce =>'1',
            en_mem=>'1',
-           in_data =>"000",
-           R_W =>'0',
+           in_data =>write_type_piece,
+           R_W =>F_RW_plateau,
            addr_grille_c =>out_addr_C,
            addr_grille_l =>out_addr_L,
            type_piece  => type_piece
@@ -164,11 +248,14 @@ begin
            in_data =>type_piece,
            addr_grille_c_out =>verif_addr_C,
            addr_grille_l_out =>verif_addr_L,
-           R_W=> R_W_grille,
            out_victoire=>victoire,
-           out_piece_verte=>out_piece_verte
+           piece1_LC=> piece1_LC,
+           piece2_LC=> piece2_LC,
+           piece3_LC=> piece3_LC,
+           piece4_LC=> piece4_LC
           
          );
           signot_reset<=not(reset);
-          LED<=victoire;
+        
+        
     end Behavioral;

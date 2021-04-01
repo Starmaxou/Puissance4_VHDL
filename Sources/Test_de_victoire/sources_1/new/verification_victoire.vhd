@@ -39,14 +39,17 @@ entity verification_victoire is
            in_data : in STD_LOGIC_VECTOR (2 downto 0);
            addr_grille_c_out : out STD_LOGIC_VECTOR (2 downto 0);
            addr_grille_l_out : out STD_LOGIC_VECTOR (2 downto 0);
-           R_W:out STD_LOGIC;
            out_victoire : out STD_LOGIC_VECTOR (1 downto 0);
-           out_piece_verte : out STD_LOGIC_VECTOR (2 downto 0)
+           piece1_LC : out STD_LOGIC_VECTOR (15 downto 0);
+           piece2_LC : out STD_LOGIC_VECTOR (15 downto 0);
+           piece3_LC : out STD_LOGIC_VECTOR (15 downto 0);
+           piece4_LC : out STD_LOGIC_VECTOR (15 downto 0)
+   
            );
 end verification_victoire;
 
 architecture Behavioral of verification_victoire is
- TYPE Etat IS (INIT_STATE_ON,INIT_STATE_OFF,FIN,SEND,CHECK_LIGNE,CHECK_COLONNE,CHECK_DIAGONALE_G1,CHECK_DIAGONALE_G2,CHECK_DIAGONALE_G3,CHECK_DIAGONALE_G4,CHECK_DIAGONALE_G5,CHECK_DIAGONALE_G6,CHECK_DIAGONALE_D1,CHECK_DIAGONALE_D2,CHECK_DIAGONALE_D3,CHECK_DIAGONALE_D4,CHECK_DIAGONALE_D5,CHECK_DIAGONALE_D6,AFFICHE_PIECE1,AFFICHE_PIECE2,AFFICHE_PIECE3,AFFICHE_PIECE4);
+ TYPE Etat IS (INIT_STATE_ON,INIT_STATE_OFF,FIN,SEND,TMP,CHECK_LIGNE,CHECK_COLONNE,CHECK_DIAGONALE_G1,CHECK_DIAGONALE_G2,CHECK_DIAGONALE_G3,CHECK_DIAGONALE_G4,CHECK_DIAGONALE_G5,CHECK_DIAGONALE_G6,CHECK_DIAGONALE_D1,CHECK_DIAGONALE_D2,CHECK_DIAGONALE_D3,CHECK_DIAGONALE_D4,CHECK_DIAGONALE_D5,CHECK_DIAGONALE_D6);
  signal pr_state , nx_state  : Etat := INIT_STATE_ON;
  SIGNAL cpt_c:  STD_LOGIC_VECTOR (7 downto 0);
  SIGNAL cpt_l : STD_LOGIC_VECTOR (7 downto 0);
@@ -58,10 +61,6 @@ architecture Behavioral of verification_victoire is
  SIGNAL buf_out_piece2_LC : STD_LOGIC_VECTOR (15 downto 0);
  SIGNAL buf_out_piece3_LC : STD_LOGIC_VECTOR (15 downto 0);
  SIGNAL buf_out_piece4_LC : STD_LOGIC_VECTOR (15 downto 0);
- SIGNAL piece1_LC : STD_LOGIC_VECTOR (15 downto 0);
- SIGNAL piece2_LC : STD_LOGIC_VECTOR (15 downto 0);
- SIGNAL piece3_LC : STD_LOGIC_VECTOR (15 downto 0);
- SIGNAL piece4_LC : STD_LOGIC_VECTOR (15 downto 0);
 
 begin
     
@@ -246,19 +245,9 @@ begin
                                  end if;
                             end if;
                       when  FIN=>
-                               if(cpt_piece4_rouge ="100" or cpt_piece4_jaune ="100")then
-                                    nx_state <=  AFFICHE_PIECE1;
-                               else
-                                    nx_state <=SEND;
-                               end if;
-                      when  AFFICHE_PIECE1=>
-                              nx_state <=  AFFICHE_PIECE2;
-                      when  AFFICHE_PIECE2=>
-                             nx_state <=   AFFICHE_PIECE3;
-                      when  AFFICHE_PIECE3=>
-                             nx_state <=   AFFICHE_PIECE4;
-                      when  AFFICHE_PIECE4=>
-                             nx_state <=   SEND;
+                                  nx_state <=TMP;
+                       when  TMP=>
+                                nx_state <=SEND;
                       when  SEND=>
                               nx_state <=INIT_STATE_ON;
             end case;
@@ -436,7 +425,7 @@ begin
     end process cal_output;
     
     
-    cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge)
+ cal_victoire : process(pr_state,cpt_l_1,cpt_c_1,cpt_piece4_jaune,cpt_piece4_rouge)
     begin
           
             if(pr_state =INIT_STATE_OFF)then
@@ -450,12 +439,14 @@ begin
                  buf_out_piece3_LC<="0000000000000000";
                  buf_out_piece4_LC<="0000000000000000";
                  
-            elsif( cpt_piece4_rouge ="100" or cpt_piece4_jaune ="100")then
+           
+             end if;           
+             if( cpt_piece4_jaune="100"or cpt_piece4_rouge="100" )then
                    piece4_LC<=buf_out_piece4_LC;
                    piece3_LC<=buf_out_piece3_LC;
                    piece2_LC<=buf_out_piece2_LC;
                    piece1_LC<=buf_out_piece1_LC;
-            else
+             else
                    buf_out_piece4_LC(15 downto 8) <=cpt_l_1;
                    buf_out_piece3_LC(15 downto 8) <=buf_out_piece4_LC(15 downto 8);
                    buf_out_piece2_LC(15 downto 8) <=buf_out_piece3_LC(15 downto 8);
@@ -465,68 +456,15 @@ begin
                    buf_out_piece3_LC(7 downto 0) <=buf_out_piece4_LC(7 downto 0);
                    buf_out_piece2_LC(7 downto 0) <=buf_out_piece3_LC(7 downto 0);
                    buf_out_piece1_LC(7 downto 0) <=buf_out_piece2_LC(7 downto 0);
-            end if;                   
+             
+            end if;       
     end process cal_victoire;
     
-    Affiche_les_pieces : process(pr_state,cpt_c,cpt_l,piece4_LC,piece3_LC,piece2_LC,piece1_LC)
-    begin
-             case pr_state is
-                when  AFFICHE_PIECE1=>
-                         addr_grille_c_out <= piece1_LC(2 downto 0);
-                         addr_grille_l_out <= piece1_LC(10 downto 8);  
-                         R_W<='1';  
-                         if(cpt_piece4_rouge ="100")then
-                              out_piece_verte <="011";  --rouge
-                         else
-                              out_piece_verte <="111";  --jaune
-                         end if;
-                            
-                when  AFFICHE_PIECE2=>
-                         addr_grille_c_out <= piece2_LC(2 downto 0);
-                         addr_grille_l_out <= piece2_LC(10 downto 8);  
-                         R_W<='1';  
-                         if(cpt_piece4_rouge ="100")then
-                              out_piece_verte <="011";  --rouge
-                         else
-                              out_piece_verte <="111";  --jaune
-                         end if;                         
     
-                when  AFFICHE_PIECE3=>
-                         addr_grille_c_out <= piece3_LC(2 downto 0);
-                         addr_grille_l_out <= piece3_LC(10 downto 8);  
-                         R_W<='1';  
-                         if(cpt_piece4_rouge ="100")then
-                              out_piece_verte <="011";  --rouge
-                         else
-                              out_piece_verte <="111";  --jaune
-                         end if;                         
-         
-                when  AFFICHE_PIECE4=>
-                         addr_grille_c_out <= piece4_LC(2 downto 0);
-                         addr_grille_l_out <= piece4_LC(10 downto 8);  
-                         R_W<='1';  
-                         if(cpt_piece4_rouge ="100")then
-                              out_piece_verte <="011";  --rouge
-                         else
-                              out_piece_verte <="111";  --jaune
-                         end if;                         
-                         
-                when others=> 
-                        addr_grille_c_out <= cpt_c(2 downto 0);
-                        addr_grille_l_out <= cpt_l(2 downto 0);    
-                        R_W<='0';   
-                        out_piece_verte <="000";                 
-            end case;
-        
-        
-    end process Affiche_les_pieces;
-    
-    cal_piece_victoire : process(pr_state)
+    cal_piece_victoire : process(pr_state,cpt_piece4_jaune,cpt_piece4_rouge)
     begin
           
-            if( pr_state =INIT_STATE_OFF )then
-                 out_victoire<="00";
-            elsif(pr_state =SEND)then
+            if(pr_state =SEND)then
                     
                      if(cpt_piece4_jaune >="100") then--4
                             out_victoire<="10";
@@ -535,6 +473,8 @@ begin
                      else
                             out_victoire<="11";
                      end if;
+            elsif(pr_state=INIT_STATE_OFF)then
+                 out_victoire<="00";
             end if;                   
     end process cal_piece_victoire;
     
@@ -549,6 +489,7 @@ begin
                    cpt_piece_rouge := 0;
                  elsif ( clk' event and clk='1') then
                   if(ce = '1') then
+                 
                          if( pr_state /=INIT_STATE_ON and pr_state /=INIT_STATE_OFF and pr_state /=SEND)then
                                 if(cpt_piece_jaune<4) then
                                    if( in_data="110")then --jaune
@@ -571,8 +512,13 @@ begin
                                         end if;
                                    end if;
                                 end if;
-                           
-                         end if; 
+                         elsif(pr_state =INIT_STATE_ON)then
+                          cpt_piece_jaune := 0;
+                          cpt_piece_rouge := 0;
+                         
+                         end if;
+                        
+                          
                              cpt_piece4_jaune<= std_logic_vector(to_unsigned(cpt_piece_jaune, 3));
                              cpt_piece4_rouge<= std_logic_vector(to_unsigned(cpt_piece_rouge, 3));
                     end if;
@@ -582,4 +528,6 @@ begin
             
                      
     end process cal_nb_piece;
+     addr_grille_c_out <= cpt_c(2 downto 0);
+     addr_grille_l_out <= cpt_l(2 downto 0);    
 end Behavioral;
