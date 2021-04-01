@@ -80,9 +80,7 @@ architecture Behavioral of top_victoire is
     signal BTNC_Edge: std_logic;
     signal BTNR_Edge: std_logic;
     
-    signal CEaff: std_logic;
-    signal CEincrement: std_logic;
-    signal CETraitement: std_logic;
+  
 begin
 
       Edge_BTNL  :entity work.Edge_detector
@@ -108,13 +106,7 @@ begin
            data_in =>BTNR,
            data_out=>BTNR_Edge);
            
-           Clock_manager  :entity work.Clock_manager
-        Port map ( 
-            H =>clk100M,
-           RAZ =>signot_reset,
-           CEaff => CEaff,
-           CEincrement=> CEincrement,
-           CETraitement=>CETraitement);
+       
            
            
 
@@ -128,7 +120,7 @@ begin
            A_read_type_piece=>type_piece,
            B_state_victoire=>victoire,
            W_Ready  =>W_Ready,
-          
+           
            
            C_ligne_grille =>addr_L_FSM,
            D_colonne_grille=>addr_C_FSM,
