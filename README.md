@@ -7,7 +7,8 @@ La cible FPGA utilisée : xc7a50tcsg324-1
 Lien vers le module VGA : http://bornat.vvv.enseirb.fr/wiki/doku.php?id=en202:vga_bitmap
 
 
-![image](https://user-images.githubusercontent.com/56961627/113367311-f19f7b80-935b-11eb-8036-36a9c59f7db8.png)
+![image](https://user-images.githubusercontent.com/56961627/113367409-34f9ea00-935c-11eb-9af7-93a8571daca8.png)
+
 
 
 
